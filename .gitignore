@@ -2,6 +2,9 @@
 .cproject
 .project
 .settings/
+.tracecompass
+.DS_Store
+RemoteSystemsTempFiles/
 Debug/
 *.txt
 *.out
