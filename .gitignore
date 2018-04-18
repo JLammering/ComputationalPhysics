@@ -1,0 +1,8 @@
+.metadata/
+.cproject
+.project
+.settings/
+Debug/
+*.txt
+*.out
+*.pdf
