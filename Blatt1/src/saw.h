@@ -35,7 +35,7 @@ struct position{
 
 };
 
-int main() {
+void saw() {
 
 
 	const int cluster = 1e5;
@@ -124,5 +124,4 @@ int main() {
 		}
 	myfile.close();
 
-	return 0;
 }

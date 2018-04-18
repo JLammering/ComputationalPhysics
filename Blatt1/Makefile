@@ -1,7 +1,7 @@
 
 CC=g++
 OPT= -std=c++11 -o3
-Files= saw.cpp plot.pdf
+Files= src/blatt1.cpp
 
 build: ${Files}
 	${CC} ${OPT} ${Files} -o Nr1.out
