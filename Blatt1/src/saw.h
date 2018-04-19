@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : saw.cpp
-// Author      : Jasper Karl Lammering
+// Author      : Jasper Karl Lammering, Timo Gräßer, Henning Ptaszyk
 // Version     :
 // Copyright   : Your copyright notice
 // Description :
@@ -15,6 +15,7 @@
 
 using namespace std;
 
+// erzeuge struct mit dem sich auf gitter bewegt wird
 struct position{
 	int x;
 	int y;
@@ -29,6 +30,8 @@ struct position{
 	void print_position(){
 		cout << "x = " << x << ", y = " << y << endl;
 	}
+
+
 	double quad_abstand_zum_ursprung(int ursprung){
 		return pow(x-ursprung, 2) + pow(y-ursprung, 2);
 	}
@@ -38,15 +41,15 @@ struct position{
 void saw() {
 
 
-	const int cluster = 1e5;
+	const int cluster = 1e5; // anzahl iterationen
 
-	double abstaende[cluster] = {0};
+	double abstaende[cluster] = {0}; // array in denen abstaende gespeichert werden
 
 	mt19937 rng; //erzeugt mersenne twister 19937 generator
 	rng.seed(random_device()()); //setzt seed (”startwert”) zufällig
 	uniform_real_distribution<> dist (0 ,1); //erzeugt Verteilung von 0 bis 1
 
-	double R_N[11] = {0};
+	double R_N[11] = {0}; // array fuer die mittleren abstaende
 
 	for(int N=10; N<=60; N+=5){//verschiedene N
 
