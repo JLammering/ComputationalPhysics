@@ -5,5 +5,5 @@ Files= src/blatt1.cpp
 
 build: ${Files}
 	${CC} ${OPT} ${Files} -o blatt1.out
-	./Nr1.out>blatt1_ausgabe.txt
+	./blatt1.out>blatt1_ausgabe.txt
 	python plotRN.py
