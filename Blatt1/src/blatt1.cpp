@@ -10,11 +10,16 @@
 
 #include "saw.h"
 #include "piAusKugel.h"
+#include "uneigentlichesIntegral.h"
 
 using namespace std;
 
 int main() {
+	cout << "Aufgabe 1:" << endl << endl;
 	saw();
-	//piAusKugel();
+	cout <<endl <<endl<< "Aufgabe 2a:" << endl << endl;
+	piAusKugel();
+	cout <<endl<<endl<< "Aufgabe 2b:" << endl << endl;
+	uneigentlichesIntegral();
 	return 0;
 }
