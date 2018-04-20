@@ -1,0 +1,53 @@
+\input{../header.tex}
+
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+\title{Blatt 1}
+\date{
+  Abgabe: 20.4.18
+}
+
+\begin{document}
+\maketitle
+
+Alle Dateien ausführbar mit der Makefile. Der Output wird dann in die Datei
+
+\texttt{blatt1\_ausgabe.txt} geschrieben.
+\section*{Aufgabe 1}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=9cm]{plot.pdf}
+  \caption{Aufgabe 1a: $R_\text{N}(N)$}
+  \label{fig:plotRN}
+\end{figure}
+
+Code des self avoiding randomwalk ist zu finden in \texttt{src/saw.h}. Dieser erzeugt die txt-Datei
+
+ \texttt{mittlClustergroesse.txt}. Damit wird mit \texttt{plotRN.py} die Datei \texttt{plot.pdf} erzeugt.
+In Abbildung \ref{fig:plotRN} ist der Plot zu sehen in dem die Wurzel aus der quadratischen mittleren Clustergröße $R_N$ gegen N aufgetragen ist.
+
+Anschließend wird eine Kurve der Funktion
+\begin{align}
+  R_\text{N}(N) = a N^e
+\end{align}
+an die Werte gefittet. Die sich ergebenden Fitwerte sind ebenfalls in Abbildung \ref{fig:plotRN} zu finden.
+
+\section*{Aufgabe 2}
+
+\subsection*{a}
+Der Code ist in der Datei \texttt{src/piAusKugel.h} zu finden.
+Ergebnisse sind in der Ausgabe.
+
+\subsection*{b}
+Der Code ist in der Datei \texttt{src/uneigentlichesIntegral.h} zu finden.
+
+Die Formel des Übungsblattes wird durch die Substitution $x = \tan(u)$ umgeformt zu:
+\begin{align}
+  \int_{-\frac{\pi}{2}}^{\arctan(T_i)} \frac{1}{\cos^2(u)} \frac{1}{\sqrt{\pi}} \exp{(-\tan^2(u))} \symup{d} u.
+\end{align}
+Ergebnisse sind in der Ausgabe.
+
+
+\end{document}

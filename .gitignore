@@ -9,3 +9,5 @@ Debug/
 *.txt
 *.out
 *.pdf
+*.aux
+*.log
