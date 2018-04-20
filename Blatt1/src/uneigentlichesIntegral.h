@@ -29,7 +29,7 @@ double simpson_int(double (*function)(double), double lowlim, double uplim, int 
 
 
 void uneigentlichesIntegral() {
-	double genauigkeit = 1e9; //N
+	double genauigkeit = 1e5; //N
 	double a = - M_PI/2; //untere Grenze
 	double b[3] = {atan(-1), atan(1.1631), M_PI/2}; //drei verschiedene Werte für die obere Grenze
 
@@ -46,7 +46,7 @@ void uneigentlichesIntegral() {
 		integral += h * func(dist(rng));
 	}
 	// num integration mit summierter simpson integration
-	double res_simpson = simpson_int(&func,  a, b[j], 1e6);
+	double res_simpson = simpson_int(&func,  a, b[j], 1e5);
 
   cout.precision(7);
   cout << "Integral von " << a << " bis "<< b[j]<<  " = " << integral << endl; // prints die 3 Ergebnisse

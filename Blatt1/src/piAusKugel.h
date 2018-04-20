@@ -12,7 +12,8 @@ using namespace std;
 
 void piAusKugel() {
 	double x, y, z; // koordinaten
-	int genauigkeit = 1e9;
+	int genauigkeit = 1e7;
+	double rel_err;
 
 	mt19937 rng; //erzeugt mersenne twister 19937 generator
 	rng.seed(random_device()()); //setzt seed (”startwert”) zufällig
@@ -30,6 +31,8 @@ void piAusKugel() {
 	}
 
 	double pi_est = (double)3*2*(double)n/((double)genauigkeit); // pi naeherungsweise berechnen
+	rel_err = 100.0 * (M_PI - pi_est) / (M_PI);
 	cout.precision(17);
-	cout << "Pi ~ " << pi_est << endl; // prints !!!Hello World!!!
+	cout << "Pi ~ " << pi_est << endl; // prints
+	cout << "Relative Abweichung in Prozent: " << rel_err << endl;
 }
