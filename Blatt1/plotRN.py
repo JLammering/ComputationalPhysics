@@ -11,7 +11,7 @@ def plotRN(N, R_N):
 
     # fit an ermittelten daten
     popt, pcov = curve_fit(func, N, R_N)
-    n_plot = np.linspace(min(N) - 30, max(N + 30), 10000)
+    n_plot = np.linspace(min(N) - 10, max(N + 110), 10000)
     plt.plot(N, R_N, 'kx', label='Messwerte')
     plt.plot(n_plot, func(n_plot, *popt), label='fit :a N^e ; [a, e] = ' + str(popt) )
     # plt.plot(n_plot, func(n_plot, popt[0], 0.75, popt[2]), label='so waere es richtig')
