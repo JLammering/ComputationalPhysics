@@ -12,7 +12,7 @@ using namespace std;
 
 void piAusKugel() {
 	double x, y, z; // koordinaten
-	int genauigkeit = 1e7;
+	int genauigkeit = 1e9;
 	double rel_err;
 
 	mt19937 rng; //erzeugt mersenne twister 19937 generator
