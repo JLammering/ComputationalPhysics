@@ -8,6 +8,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <limits>
+#include <string>
 
 
 // #include "saw.h"
@@ -15,7 +17,12 @@
 
 using namespace std;
 
-class LCG{
+class RNG{
+public:
+  virtual double getLittleRnd() = 0;
+};
+
+class LCG : public RNG{
   private:
     uint32_t r_n, a, c, m;
   public:
@@ -34,7 +41,28 @@ class LCG{
     }
 };
 
-void abspeichern(string dateiname, LCG generator, uint32_t anzahlWerte){
+class XORshift : public RNG{
+  private:
+    uint16_t a, b, c, y;
+  public:
+    XORshift(uint16_t a_eingabe, uint16_t b_eingabe, uint16_t c_eingabe, uint16_t y_eingabe){
+      a = a_eingabe;
+      b = b_eingabe;
+      c = c_eingabe;
+      y = y_eingabe;
+    }
+
+    uint16_t getRnd(){
+      y^=(y<<a);
+      y^=(y>>b);
+      return (y^=(y<<c));
+    }
+    double getLittleRnd(){
+      return (double)getRnd()/(double)(numeric_limits<uint16_t>::max());
+    }
+};
+
+void abspeichern(string dateiname, RNG& generator, uint32_t anzahlWerte){
   ofstream myfile; //Daten abspeichern zum plotten mit plotRN.py
 	myfile.open (dateiname);
 	myfile << "# Rnd_numbers \n";
@@ -43,6 +71,15 @@ void abspeichern(string dateiname, LCG generator, uint32_t anzahlWerte){
 		}
 	myfile.close();
 }
+
+int testPeriod(XORshift& rng){
+  int seed = rng.getRnd();
+  int periode = 0;
+  for (; periode != seed; periode++) {}
+  return periode;
+}
+
+
 
 int main() {
   uint32_t anzahlWerte = 1e5;
@@ -58,5 +95,18 @@ int main() {
 
   LCG vierter(1234, 16807, 0, 2147483647);
   abspeichern("build/vierterGenerator.txt", vierter, anzahlWerte);
+
+  XORshift fifth(11, 1, 7, 123);
+  abspeichern("build/fifthGenerator.txt", fifth, anzahlWerte);
+
+  XORshift six(11, 4, 7, 123);
+  abspeichern("build/sixGenerator.txt", six, anzahlWerte);
+
+  for (int b = 1; b <= 15; b++) {
+    for (int c = 0; c <= 15; c++) {
+      XORshift seveneleven(11, b, c, 123);
+      cout << "testPeriod = " << testPeriod(seveneleven) << endl;
+    }
+  }
 	return 0;
 }

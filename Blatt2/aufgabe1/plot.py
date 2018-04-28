@@ -32,3 +32,9 @@ if __name__ == '__main__':
 
     rnd_4 = np.genfromtxt('build/vierterGenerator.txt', unpack='True')
     plotHisto(rnd_4, "vierter", 2147483647)
+
+    rnd_5 = np.genfromtxt('build/fifthGenerator.txt', unpack='True')
+    plotHisto(rnd_5, "fifth", 100000)
+
+    rnd_6 = np.genfromtxt('build/sixGenerator.txt', unpack='True')
+    plotHisto(rnd_6, "six", 100000)
