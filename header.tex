@@ -85,6 +85,15 @@
   below,   % unterhalb der Section aber auf der selben Seite ist ok
 ]{placeins}
 
+%Floats innerhalb einer Subsection halten
+\makeatletter
+\AtBeginDocument{%
+  \expandafter\renewcommand\expandafter\subsection\expandafter{%
+    \expandafter\@fb@secFB\subsection
+  }%
+}
+\makeatother
+
 % Captions schöner machen.
 \usepackage[
   labelfont=bf,        % Tabelle x: Abbildung y: ist jetzt fett

@@ -1,0 +1,173 @@
+\input{../header.tex}
+
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+
+\title{Blatt 1}
+\date{
+  Abgabe: 20.4.18
+}
+
+\begin{document}
+\maketitle
+
+Alle Dateien ausführbar mit der Makefile. %Der Output wird dann in die Datei\texttt{blatt2\_ausgabe.txt} geschrieben.
+\section*{Aufgabe 1}
+
+Code um Zufallszahlen zu erzeugen und in text-Dateien zu speichern ist in \texttt{aufgabe1/aufgabe1.cpp} zu finden. Alle Plots werden erzeugt mit \texttt{aufgabe1/plot.py}.
+
+\subsection*{b}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/ersterHist.pdf}
+            \caption[Network2]%
+            {{\small $r_0 = 1234,a = 20,c = 120,m = 6075$}}
+            \label{fig:lcghist1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zweiterHist.pdf}
+            \caption[]%
+            {{\small $r_0 = 1234,a = 137,c = 187,m = 256$}}
+            \label{fig:lcghist2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/dritterHist.pdf}
+            \caption[]%
+            {{\small $r_0 = 123456789,a = 65539,c = 0,$\\$m = 2147483648$}}
+            \label{fig:lcghist3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/vierterHist.pdf}
+            \caption[]%
+            {{\small $r_0 = 1234,a = 16807,c = 0,$\\$m = 2147483647$}}
+            \label{fig:lcghist4}
+        \end{subfigure}
+        \caption[ The average and standard deviation of critical parameters ]
+        {\small Histogramme der linear kongruenten Generatoren mit den jeweiligen Parametern.}
+        \label{fig:lcghist}
+    \end{figure*}
+
+Man erkennt in \ref{fig:lcghist1} und in \ref{fig:lcghist2} Periodizitäten in der Verteilung. Die Verteilungen in \ref{fig:lcghist3} und \ref{fig:lcghist4} sehen zufälliger aus, wobei \ref{fig:lcghist4} aber weniger gleichverteilt aussieht.
+
+\subsection*{c}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/ersterScatter.pdf}
+            \caption[Network2]%
+            {{\small $r_0 = 1234,a = 20,c = 120,m = 6075$}}
+            \label{fig:lcgscatter1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zweiterScatter.pdf}
+            \caption[]%
+            {{\small $r_0 = 1234,a = 137,c = 187,m = 256$}}
+            \label{fig:lcgscatter2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/dritterScatter.pdf}
+            \caption[]%
+            {{\small $r_0 = 123456789,a = 65539,c = 0,$\\$m = 2147483648$}}
+            \label{fig:lcgscatter3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/vierterScatter.pdf}
+            \caption[]%
+            {{\small $r_0 = 1234,a = 16807,c = 0,$\\ $m = 2147483647$}}
+            \label{fig:lcgscatter4}
+        \end{subfigure}
+        \caption[ The average and standard deviation of critical parameters ]
+        {\small Korrelationsplots der linear kongruenten Generatoren mit den jeweiligen Parametern.}
+        \label{fig:lcgscatter}
+    \end{figure*}
+
+Hier sieht man anhand der wenigen erreichten Datenpaare in \ref{fig:lcgscatter1} und \ref{fig:lcgscatter2} starke Korrelationen. \ref{fig:lcgscatter3} zeigt am wenigsten Korrelation.
+
+\subsection*{d}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/fifthHist.pdf}
+            \caption[Network2]%
+            {{\small $(a_1, b_1, c_1) = (11, 1, 7)$}}
+            \label{fig:xorhist5}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/fifthScatter.pdf}
+            \caption[]%
+            {{\small $(a_1, b_1, c_1) = (11, 1, 7)$}}
+            \label{fig:xorscatter5}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/sixHist.pdf}
+            \caption[]%
+            {{\small $(a_1, b_1, c_1) = (11, 4, 7)$}}
+            \label{fig:xorhist6}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/sixScatter.pdf}
+            \caption[]%
+            {{\small $(a_1, b_1, c_1) = (11, 4, 7)$}}
+            \label{fig:xorscatter6}
+        \end{subfigure}
+        \caption[ The average and standard deviation of critical parameters ]
+        {\small Histogramme und Korrelationsplots zu den beiden XOR Shift Algorithmen mit ihren jeweiligen Parametern.}
+        \label{fig:xor}
+    \end{figure*}
+
+    Erkennbar ist, dass die Parameter-Kombination $(a_1, b_1, c_1) = (11, 1, 7)$ ein deutlich gleichmäßigeres Histogramm liefert und mehr Datenpaare erreicht werden, als bei der Parameter-Kombination $(a_1, b_1, c_1) = (11, 4, 7)$.
+
+\subsection*{e}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=5cm]{build/rekursionstest.pdf}
+  \caption{Plot bei dem die Farbe der Vierecke die Periodenlänge der XORshift-Algorithmen mit der jeweiligen Parameterkombination angibt. Mit $a=11$ und $r_0=123$.}
+  \label{fig:rekursionstest}
+\end{figure}
+
+Erkennbar ist, dass die verschiedenen Parameterkombination sehr verschiedene Periodenlängen ergeben. Die Periodenlänge wird oft als ein Qualitätskriterium eines Zufallszahlengenerators betrachtet.
+
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[height=9cm]{plot.pdf}
+%   \caption{Aufgabe 1a: $R_\text{N}(N)$}
+%   \label{fig:plotRN}
+% \end{figure}
+
+
+\section*{Aufgabe 2}
+
+\subsection*{a}
+
+
+\subsection*{b}
+
+
+\end{document}
