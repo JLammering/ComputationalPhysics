@@ -5,7 +5,7 @@
 
 \title{Blatt 1}
 \date{
-  Abgabe: 20.4.18
+  Abgabe: 04.05.18
 }
 
 \begin{document}
@@ -165,9 +165,75 @@ Erkennbar ist, dass die verschiedenen Parameterkombination sehr verschiedene Per
 \section*{Aufgabe 2}
 
 \subsection*{a}
+\subsubsection*{(i)}
+Um aus gleichverteilten Zufallszahlen(u(x) = 1) auf dem Intervall $[0,1]$, Zufallszahlen
+der Dichtefunktion $p(y) = cos(y)$ zu erzeugen, wird die Transformationsmethode
+wie folgt angewendet:
+\begin{align*}
+  \frac{1}{\left(U(1) - U(0)\right)} \int_{0}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) \int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime}\\
+  x &= \sin y \\
+  y &= \arcsin x
+\end{align*}
+Dabei wird das Zielintervall so gewählt, dass die Sinusfunktion keine negativen Werte annimmt. Es wird also das Intervall
+zwischen $0$ und $\pi / 2$ verwendet.\\ \\
+In Abbildung \ref{fig:a2_a_i} sind die generierten Zufallszahlen histogrammiert zusammen mit der Kosinusfunktion auf dem Intervall zwischen $0$ $\pi / 2$ dargestellt.
+
+\subsubsection*{(ii)}
+Um aus gleichverteilten Zufallszahlen(u(x) = 1) auf dem Intervall $[-1,1]$, Zufallszahlen
+der Dichtefunktion $p(y) = cos(y)$ zu erzeugen, wird die Transformationsmethode
+wie folgt angewendet:
+\begin{align*}
+  \frac{1}{\left(U(1) - U(-1)\right)} \int_{-1}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) \int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime}\\
+  \frac{1}{2} \left( x + 1 \right) &= \sin y \\
+  y &= \arcsin \frac{1}{2} \left( x + 1 \right)
+\end{align*}
+Dabei wird wieder das Zielintervall so gewählt, dass die Sinusfunktion keine negativen Werte annimmt. Es wird also das Intervall
+zwischen $0$ und $\pi / 2$ verwendet.
+In Abbildung \ref{fig:a2_a_ii} sind die generierten Zufallszahlen histogrammiert zusammen mit der Kosinusfunktion auf dem Intervall zwischen $0$ $\pi / 2$ dargestellt. \\ \\
+Beim vergleichen der Abbildungen \ref{fig:a2_a_i} und \ref{fig:a2_ii}, wird klar, dass die selbe Verteilung generiert wird.
+Allerdings
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{build/aufgabe2_a_i.pdf}
+  \caption{Kosinusverteilte Zufallszahlen erzeugt aus gleichverteilten Zufallszahlen zwischen $-1$ und $1$.}
+  \label{fig:a2_a_i}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{build/aufgabe2_a_ii.pdf}
+  \caption{Kosinusverteilte Zufallszahlen erzeugt aus gleichverteilten Zufallszahlen zwischen $-1$ und $1$.}
+  \label{fig:a2_a_ii}
+\end{figure}
 
 
 \subsection*{b}
+Mit der Box-Muller-Methode werden mithilfe von zwei gleichverteilten reelen Zufallszahlen $u_1$, $u_2$, aus dem Intervall zwischen
+$0$ und $1$, zwei Standardnormalverteilte Zufallszahlen $x$, $y$ erzeugt. \\
+Dies erfolgt gemäß
+\begin{align*}
+  x &= \cos 2\pi u_1 \sqrt{-2 \ln u_2} \\
+  y &= \sin 2\pi u_1 \sqrt{-2 \ln u_2} .
+\end{align*}
+
+Da es sich um die so erzeugten Zufallszahlen aber nur um eine Verteilung mit Mittelwert $\mu = 0$ und Standardabweichung $\sigma = 1$ handelt,
+müssen die einzelnen Zahlen $x_i$ (oder auch $y_i$) noch in Zahlen $z_i$ der gewünschten Verteilung mit $ \mu = 3$ und $\sigma = 4$ gemäß
+\begin{align*}
+  z_i &= \sigma x_i + \mu \\
+  z_i &= 4 x_i + 3
+\end{align*}
+überführt werden.
+
+In Abbildung \ref{fig:a2_b} sind die mit der Box-Muller-Methode erzeugten Zufallszahlen histogrammiert zusammen mit der passenden Normalverteilung
+dargestellt. Dabei beträgt die Zahl der generierten Zufallszahlen $10^{6}$, die Zahl der Bins $\sqrt{10^6} = 10^3$ und das gewählte Intervall $[-40, 40]$.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{build/aufgabe2_b.pdf}
+  \caption{Normalverteilte Zufallszahlen ($\mu = 3$, $\sigma = 4$.}
+  \label{fig:a2_b}
+\end{figure}
 
 
 \end{document}
