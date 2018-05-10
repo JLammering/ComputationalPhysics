@@ -32,7 +32,7 @@ public:
   int getZustand(){
     return spin;
   }
-  int getEnergie(double H){
+  double getEnergie(double H){
     return (-spin*H);
   }
   void changeZustand(){

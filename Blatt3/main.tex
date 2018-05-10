@@ -5,7 +5,7 @@
 
 \title{Blatt 3}
 \date{
-  Abgabe: 04.05.18
+  Abgabe: 11.05.18
 }
 
 \begin{document}
@@ -13,6 +13,21 @@
 
 Alle Dateien ausführbar mit der Makefile. %Der Output wird dann in die Datei\texttt{blatt2\_ausgabe.txt} geschrieben.
 \section*{Aufgabe 1}
+\subsection*{a}
+Allgemeine Formel:
+\begin{align}
+  <O(E)> &= \frac{\sum_\text{alle Zustände} O \exp(-\beta E)}{Z}\\
+  \intertext{mit}
+  Z &= \sum_i \exp(-E_i \beta).\\
+  \intertext{Hier:}
+  m &= <s> = \frac{\sum_s s \exp(-E \beta)}{\sum_s \exp(-E \beta)}\\
+  \intertext{mit}
+  s &= \pm 1, \quad \beta = 1 \quad \text{und}\quad E = -s H\\
+  \\
+  => m &= \frac{1\exp(+H) - 1\exp(-H)}{\exp(+H) + \exp(-H)} = \frac{2 \sinh(H)}{2 \cosh(H)} = \tanh(H)
+\end{align}
+
+
 
 
 
