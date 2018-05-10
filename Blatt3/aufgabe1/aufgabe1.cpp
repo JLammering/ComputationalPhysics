@@ -42,7 +42,7 @@ public:
 
 
 int main() {
-  double schritte = 10;
+  double schritte = 100000;
   double beta = 1;
   double H =-5;
   ofstream myfile; //Daten abspeichern zum plotten mit plotRN.py
@@ -52,7 +52,7 @@ int main() {
   for (int i = 0; i <= 10000; i++) {
   H += 0.001;
   zustand alt(0);
-  int sum = 0;
+  double sum = 0;
   for (int k = 0; k < schritte; k++) {
     sum += alt.getZustand();
     //cout << alt.getZustand()<<endl;

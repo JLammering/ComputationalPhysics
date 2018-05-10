@@ -11,3 +11,4 @@ Debug/
 *.pdf
 *.aux
 *.log
+*.fdb_latexmk
