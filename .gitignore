@@ -12,3 +12,4 @@ Debug/
 *.aux
 *.log
 *.fdb_latexmk
+*.fls
