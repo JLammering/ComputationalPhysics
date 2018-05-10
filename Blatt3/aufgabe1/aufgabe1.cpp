@@ -32,10 +32,10 @@ public:
   int getZustand(){
     return spin;
   }
-  double getEnergie(double H){
+  double getEnergie(double H){ // gibt jeweils die dem spinzustand zugeordnete energie zurueck
     return (-spin*H);
   }
-  void changeZustand(){
+  void changeZustand(){ //  veranlasse spin-flip
     spin *= -1;
   }
 };
@@ -44,32 +44,32 @@ public:
 int main() {
   double schritte = 100000;
   double beta = 1;
-  double H =-5;
+  double H =-5; // min-wert fuer H
   ofstream myfile; //Daten abspeichern zum plotten mit plotRN.py
 	myfile.open ("build/magnetisierung.txt");
   myfile << "#magnetisierung H \n";
 
-  for (int i = 0; i <= 10000; i++) {
+  for (int i = 0; i <= 10000; i++) { // laufe von min-wert bis maxwert von H indem pro durchlauf 1/1000 addiert wird
   H += 0.001;
-  zustand alt(0);
+  zustand alt(0); // initalisiere "alt" in zufaelligem zustand
   double sum = 0;
   for (int k = 0; k < schritte; k++) {
-    sum += alt.getZustand();
+    sum += alt.getZustand(); // addiere werte der spins
     //cout << alt.getZustand()<<endl;
-    zustand neu(alt.getZustand());
+    zustand neu(alt.getZustand()); // initialisiere neuen zustand gegensaetzlich zum alten
     double energiediff = neu.getEnergie(H) - alt.getEnergie(H);
     if(energiediff < 0){
-      alt.changeZustand();
-    }else{
+      alt.changeZustand(); // wenn alte energie groesser als neue -> aktzeptiere neuen zustand
+    }else{ // wenn neue energie groesser -> erzeuge gleichverteilte zufallszahl auf [0,1] und vergleiche mit boltzmannfaktor
       double zufallszahl = drand48();
       double boltzmann = exp(-beta*energiediff);
       //cout << energiediff << ' '<<zufallszahl<<" "<<boltzmann<<endl;
-      if (zufallszahl<boltzmann) {
+      if (zufallszahl<boltzmann) { // wenn boltzmannfaktor groesser aktzeptiere
         alt.changeZustand();
       }
     }
   }
-  double magnetisierung = sum/schritte;
+  double magnetisierung = sum/schritte; // berechne mittlere magnetisierung
   myfile << setprecision(4)<< magnetisierung << " " << H << endl;
 }
 myfile.close();
