@@ -7,7 +7,7 @@ x1 = np.genfromtxt("build/gauss.txt", unpack=True)
 
 # parameter gaussfunc
 mu = 3.0
-si = 4.0
+si = 2.0
 
 
 # gaussfunktion
@@ -27,7 +27,7 @@ plt.hist(x1, bins=int(np.sqrt(len(x1))), range=(-rg, rg), histtype='bar',
          label="Generierte  Zufallszahlen # = 1e6)")
 
 plt.plot(x_plot, g(x_plot, mu, si),
-         label=r'$\mathrm{gaussfunktion \ mit } \ \mu = 3 \ \mathrm{und} \ \sigma = 4$')
+         label=r'$\mathrm{gaussfunktion \ mit } \ \mu = 3 \ \mathrm{und} \ \sigma = 2$')
 plt.xlabel("bins")
 plt.ylabel("# hits (normiert)")
 plt.tight_layout(pad=0, h_pad=1.08, w_pad=1.08)

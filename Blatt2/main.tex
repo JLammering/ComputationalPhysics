@@ -170,7 +170,7 @@ Um aus gleichverteilten Zufallszahlen(u(x) = 1) auf dem Intervall $[0,1]$, Zufal
 der Dichtefunktion $p(y) = cos(y)$ zu erzeugen, wird die Transformationsmethode
 wie folgt angewendet:
 \begin{align*}
-  \frac{1}{\left(U(1) - U(0)\right)} \int_{0}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) \int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime}\\
+  \frac{1}{\left(U(1) - U(0)\right)} \int_{0}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) }\int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime\\
   x &= \sin y \\
   y &= \arcsin x
 \end{align*}
@@ -183,7 +183,7 @@ Um aus gleichverteilten Zufallszahlen(u(x) = 1) auf dem Intervall $[-1,1]$, Zufa
 der Dichtefunktion $p(y) = cos(y)$ zu erzeugen, wird die Transformationsmethode
 wie folgt angewendet:
 \begin{align*}
-  \frac{1}{\left(U(1) - U(-1)\right)} \int_{-1}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) \int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime}\\
+  \frac{1}{\left(U(1) - U(-1)\right)} \int_{-1}^{x} u(x^\prime) \mathrm{d}^\prime &= \frac{1}{\left( \sin \pi /2) - \sin 0 \right) }\int_{0}^{y} cos(y^\prime) \mathrm{d}y^\prime\\
   \frac{1}{2} \left( x + 1 \right) &= \sin y \\
   y &= \arcsin \frac{1}{2} \left( x + 1 \right)
 \end{align*}
@@ -218,7 +218,7 @@ Dies erfolgt gemäß
 \end{align*}
 
 Da es sich um die so erzeugten Zufallszahlen aber nur um eine Verteilung mit Mittelwert $\mu = 0$ und Standardabweichung $\sigma = 1$ handelt,
-müssen die einzelnen Zahlen $x_i$ (oder auch $y_i$) noch in Zahlen $z_i$ der gewünschten Verteilung mit $ \mu = 3$ und $\sigma = 4$ gemäß
+müssen die einzelnen Zahlen $x_i$ (oder auch $y_i$) noch in Zahlen $z_i$ der gewünschten Verteilung mit $ \mu = 3$ und $\sigma^2 = 4$ gemäß
 \begin{align*}
   z_i &= \sigma x_i + \mu \\
   z_i &= 4 x_i + 3

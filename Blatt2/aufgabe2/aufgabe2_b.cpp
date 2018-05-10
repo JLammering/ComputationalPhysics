@@ -24,7 +24,7 @@ int main() {
 	int number = 1e6; // anzahl zu generierender zufallszahlen
 
 	double mu  = 3.0; // geforderter mittelwert
-	double si  = 4.0; // geforderte  standardabweichung
+	double si  = 2.0; // geforderte  standardabweichung
 
 	ofstream file;
 	file.open("build/gauss.txt");
