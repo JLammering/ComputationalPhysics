@@ -3,13 +3,18 @@ OPT= -std=c++11 -o3
 
 all: build/main.pdf
 
-build/magnetisierung.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py
-	${CC} ${OPT} aufgabe1/aufgabe1.cpp -o blatt3.out
-	./blatt3.out #>blatt2_ausgabe.txt
-	python aufgabe1/plot.py
+build/magnetisierung.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py aufgabe2/aufgabe2.cpp
+	#${CC} ${OPT} aufgabe1/aufgabe1.cpp -o aufgabe1.out
+	#./aufgabe1.out #>blatt2_ausgabe.txt
+	#python aufgabe1/plot.py
+	${CC} ${OPT} aufgabe2/aufgabe2.cpp -o aufgabe2.out
+	./aufgabe2.out
 
+# build/blatt3_ausgabe.txt: aufgabe2/aufgabe2.cpp
+# 	${CC} ${OPT} aufgabe1/aufgabe1.cpp -o aufgabe2.out
+# 	./aufgabe2.out > blatt3_ausgabe.txt
 
-build/main.pdf: build/magnetisierung.pdf
+build/main.pdf: build/magnetisierung.pdf #build/blatt3_ausgabe.txt
 
 
 build/main.pdf: FORCE | build
