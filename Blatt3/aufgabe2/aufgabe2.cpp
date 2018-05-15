@@ -14,14 +14,18 @@ class gitter{
   private:
     int gitterGroesse = 40;
     int gitter_array[40][40];
+    double wkeit = 0.5;
 public:
-  gitter(){//Konstruktor
+  gitter(bool allesgleich){//Konstruktor
+    if(allesgleich){
+      wkeit = 1.0;
+    }
     for (int i = 0; i < gitterGroesse; i++) {//zeilen
       for (int k = 0; k < gitterGroesse; k++) {//spalten
-        if (drand48()<0.5)
+        if (drand48()<wkeit)
           gitter_array[i][k] = +1;
         else
-          gitter_array[i][k] = +1;
+          gitter_array[i][k] = -1;
       }
     }
   }
@@ -67,9 +71,8 @@ public:
   }
 };
 
-gitter zweiDimensionenIsing(int schritte, double kbT, string dateiname){
+void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& grid){
   //Gitter initialisieren
-  gitter grid;
   int gitterGroesse = grid.getGitterGroesse();
   double beta = pow(kbT, -1);
 
@@ -111,7 +114,6 @@ gitter zweiDimensionenIsing(int schritte, double kbT, string dateiname){
     matrix << "\n";
      }
     matrix.close();
-  return(grid);
   }
 
 
@@ -120,14 +122,28 @@ gitter zweiDimensionenIsing(int schritte, double kbT, string dateiname){
 
 int main() {
   cout << "its something" << endl;
-  int schritte = 100000;
-  double kbTgleicheins = 1;
-  double kbTgleichzwei = 2;
-  double kbTgleichdrei = 3;
+  int schritteaufwaerm = 1e4;
+  int sweeeeeeeeeeeeep = 1e7;
+  gitter gridGleich1(true);
+  gitter gridGleich2(false);
+  gitter gridZufall1(false);
+  gitter gridZufall2(false);
+  gitter gridZufall3(false);
 
-  gitter g1 = zweiDimensionenIsing(schritte, kbTgleicheins, "kbTgleicheins");
-  gitter g2 = zweiDimensionenIsing(schritte, kbTgleichzwei, "kbTgleichzwei");
-  gitter g3 = zweiDimensionenIsing(schritte, kbTgleichdrei, "kbTgleichdrei");
+  //aufwärmphase
+  zweiDimensionenIsing(schritteaufwaerm, 1, "kbTgleicheins", gridZufall1);
+  zweiDimensionenIsing(schritteaufwaerm, 2, "kbTgleichzwei", gridZufall2);
+  zweiDimensionenIsing(schritteaufwaerm, 3, "kbTgleichdrei", gridZufall3);
+  cout << "alle Systeme aufgwärmt" << endl;
+
+  //sweep
+  zweiDimensionenIsing(sweeeeeeeeeeeeep, 1, "kbTgleicheins_sweep", gridZufall1);
+  cout << "erster sweeeeeeeeeeeeep" << endl;
+  zweiDimensionenIsing(sweeeeeeeeeeeeep, 2, "kbTgleichzwei_sweep", gridZufall2);
+  cout << "zweiter sweeeeeeeeeeeeep" << endl;
+  zweiDimensionenIsing(sweeeeeeeeeeeeep, 3, "kbTgleichdrei_sweep", gridZufall3);
+  cout << "dritter sweeeeeeeeeeeeep" << endl;
+
 
   return 0;
 }
