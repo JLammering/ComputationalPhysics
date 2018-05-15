@@ -47,7 +47,6 @@ public:
            getEntry(j, l)*getEntry(((j-1)%gg+gg)%gg, l) +
            getEntry(j, l)*getEntry(j, ((l-1)%gg+gg)%gg) +
            getEntry(j, l)*getEntry(j, ((l+1)%gg+gg)%gg));
-        cout << "energie= " <<j<<l<< energie_berechnet << gitter_array[j][l]<< endl;
       }
     }
 
