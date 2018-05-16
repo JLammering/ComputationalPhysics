@@ -6,6 +6,7 @@
 #include <random>
 #include <fstream>
 #include <string>
+#include <vector>
 
 
 using namespace std;
@@ -109,9 +110,9 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
   int wieVielWerte = 1e4;
   for (int i = 0; i < schritte; i++) {
     if(i%((int)schritte/wieVielWerte)== 0){
-    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i/1e3<< "\n";
-    magnetfile << magnetisierung_allgemein << " " << i/1e3 << "\n";
-    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/1e3 << "\n";
+    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i/wieVielWerte<< "\n";
+    magnetfile << magnetisierung_allgemein << " " << i/wieVielWerte << "\n";
+    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/wieVielWerte << "\n";
   }
     int x = drand48()*gitterGroesse;
     int y = drand48()*gitterGroesse;
@@ -149,30 +150,45 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
     matrix.close();
   }
 
+//
+void templiste(vector<double>& temperaturen, double start, double ende, double schritte){
+  for (double T = start; T <= ende; T += schritte) {
+    temperaturen.push_back(T);
+  }
+}
+
 // zweite funktion fuer temperaturplot
-void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& grid){
-  //Gitter initialisieren
-  int gitterGroesse = grid.getGitterGroesse();
-  double beta = pow(kbT, -1);
+void TempZweiDimensionenIsing(int schritte, string dateiname){
 
   //magnetisierung
   ofstream magnetfile;
-  magnetfile.open("build/magnet"+dateiname+".txt");
-  double magnetisierung_allgemein = grid.getMagnetisierung();
+  magnetfile.open("build/tempmagnet"+dateiname+".txt");
+
 
   //magnetisierungabs
   ofstream absmagnetfile;
-  absmagnetfile.open("build/absmagnet"+dateiname+".txt");
-  // double absmagnetisierung_allgemein = grid.getabsMagnetisierung();
+  absmagnetfile.open("build/tempabsmagnet"+dateiname+".txt");
 
+  //temperaturen vektoren erstellen
+  vector <double> temperaturen;
+  templiste(temperaturen, 1, 2.1, 0.1);
+  templiste(temperaturen, 2.1, 2.4, 0.01);
+  templiste(temperaturen, 2.5, 3.1, 0.1);
+
+
+  for( int iter = 0; iter < temperaturen.size(); iter ++){
+  //Gitter initialisieren
+  gitter grid(false);
+  int gitterGroesse = grid.getGitterGroesse();
+
+  double kbT = temperaturen.at(iter);
+  double magnetisierung_allgemein = grid.getMagnetisierung();
+  double beta = pow(kbT, -1);
 
   //Metropolis
   int wieVielWerte = 1e4;
   for (int i = 0; i < schritte; i++) {
-    if(i%((int)schritte/wieVielWerte)== 0){
-    magnetfile << magnetisierung_allgemein << " " << i/1e3 << "\n";
-    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/1e3 << "\n";
-  }
+
     int x = drand48()*gitterGroesse;
     int y = drand48()*gitterGroesse;
 
@@ -181,19 +197,22 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
     //wieder ändern wenn es verworfen wird
     if(energiediff <= 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
       grid.changeEntry(x, y);
-      energie_allgemein += energiediff; //gesamtenergie ändert sich
       magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);
     }else{ // wenn neue energie groesser -> erzeuge gleichverteilte zufallszahl auf [0,1] und vergleiche mit boltzmannfaktor
       double zufallszahl = drand48();
       double boltzmann = exp(-beta*energiediff);
       if (zufallszahl<boltzmann){
         grid.changeEntry(x, y); // wenn boltzmannfaktor groesser aktzeptiere
-        energie_allgemein += energiediff;
         magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);}
     }
   }
+  magnetfile << magnetisierung_allgemein << " " << temperaturen.at(iter) << "\n";
+  absmagnetfile << abs(magnetisierung_allgemein) << " " << temperaturen.at(iter) << "\n";
+}
+
   magnetfile.close();
   absmagnetfile.close();
+
 
 }
 
@@ -223,6 +242,9 @@ int main() {
   cout << "zweiter sweeeeeeeeeeeeep" << endl;
   zweiDimensionenIsing(sweeeeeeeeeeeeep, 3, "kbTgleichdrei_sweep", gridZufall3);
   cout << "dritter sweeeeeeeeeeeeep" << endl;
+
+  //tempplots
+  TempZweiDimensionenIsing(sweeeeeeeeeeeeep, "datei");
 
 
   return 0;

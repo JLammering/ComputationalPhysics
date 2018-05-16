@@ -22,9 +22,18 @@ def plotEnergie(schritt, energie, dateiname):
     plt.savefig("build/plots/energie"+dateiname+".pdf")
     plt.close()
 
+
 def plotMagnetisierung(schritt, magnetisierung, dateiname, yachse):
     plt.plot(schritt, magnetisierung)
     plt.xlabel("sweep")
+    plt.ylabel(yachse)
+    plt.savefig("build/plots/"+dateiname+".pdf")
+    plt.close()
+
+
+def plotTempAbhaengig(temperaturen, magnetisierung, dateiname, yachse):
+    plt.plot(temperaturen, magnetisierung)
+    plt.xlabel("T")
     plt.ylabel(yachse)
     plt.savefig("build/plots/"+dateiname+".pdf")
     plt.close()
@@ -52,13 +61,7 @@ if __name__ == '__main__':
         plotMagnetisierung(schritte, absmagnet, 'absmagnetkbTgleich'+elem, "<|m|>")
         print("plotted"+elem)
 
-    # energie
-    # energie1, schritte1 = np.genfromtxt('build/energiekbTgleicheins.txt', unpack='True')
-    # plotEnergie(energie1, schritte1, 'kbTgleicheins')
-    #
-    #
-    # energie2, schritte2 = np.genfromtxt('build/energiekbTgleichzwei.txt', unpack='True')
-    # plotEnergie(energie2, schritte2, 'kbTgleichzwei')
-    #
-    # energie3, schritte3 = np.genfromtxt('build/energiekbTgleichdrei.txt', unpack='True')
-    # plotEnergie(energie3, schritte3, 'kbTgleichdrei')
+    tempmagnet, temperaturen = np.genfromtxt('build/tempmagnetdatei.txt', unpack='True')
+    plotTempAbhaengig(temperaturen, tempmagnet, "tempmagnet", "<m>")
+    tempmagnet, temperaturen = np.genfromtxt('build/tempabsmagnetdatei.txt', unpack='True')
+    plotTempAbhaengig(temperaturen, tempmagnet, "abstempmagnet", "<|m|>")
