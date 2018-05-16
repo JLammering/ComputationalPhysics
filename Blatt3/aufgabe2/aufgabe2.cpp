@@ -12,8 +12,8 @@ using namespace std;
 
 class gitter{
   private:
-    int gitterGroesse = 40;
-    int gitter_array[40][40];
+    int gitterGroesse = 100;
+    int gitter_array[100][100];
     double wkeit = 0.5;
 public:
   gitter(bool allesgleich){//Konstruktor
@@ -54,10 +54,8 @@ public:
            getEntry(j, ((l+1)%gg+gg)%gg));
       }
     }
-
-    return -1*(double)energie_berechnet*0.5;//*0.5 wegen doppelter nächster Nachbarn
+    return -1*(double)energie_berechnet;
   }
-
 
   double getEnergyDiff(int j, int l){
     int spin_aktuell = getEntry(j, l);
@@ -69,6 +67,21 @@ public:
 
     return 2*energie_lokal;
   }
+
+  double getMagnetisierung(){
+    int gg = getGitterGroesse();
+    int sum = 0;
+    for (int i = 0; i < gg; i++) {
+      for (int k = 0; k < gg; k++) {
+        sum += getEntry(i,k);
+      }
+    }
+    return ((double)sum/pow(gg, 2));
+  }
+
+  double getabsMagnetisierung(){
+    return(abs(getMagnetisierung()));
+  }
 };
 
 void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& grid){
@@ -76,32 +89,52 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
   int gitterGroesse = grid.getGitterGroesse();
   double beta = pow(kbT, -1);
 
-  //äqibrilierungsphase
+  //energie
   ofstream energyfile;
   energyfile.open("build/energie"+dateiname+".txt");
+  double energie_allgemein = grid.getEnergy();
+
+  //magnetisierung
+  ofstream magnetfile;
+  magnetfile.open("build/magnet"+dateiname+".txt");
+  double magnetisierung_allgemein = grid.getMagnetisierung();
+
+  //magnetisierungabs
+  ofstream absmagnetfile;
+  absmagnetfile.open("build/absmagnet"+dateiname+".txt");
+  // double absmagnetisierung_allgemein = grid.getabsMagnetisierung();
+
 
   //Metropolis
-  double energie_allgemein = grid.getEnergy();
+  int wieVielWerte = 1e4;
   for (int i = 0; i < schritte; i++) {
-    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i << "\n";
-
+    if(i%((int)schritte/wieVielWerte)== 0){
+    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i/1e3<< "\n";
+    magnetfile << magnetisierung_allgemein << " " << i/1e3 << "\n";
+    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/1e3 << "\n";
+  }
     int x = drand48()*gitterGroesse;
     int y = drand48()*gitterGroesse;
 
     double energiediff = grid.getEnergyDiff(x, y);
+    //energyfile << energiediff/pow(gitterGroesse, 2) << "\n";
     //wieder ändern wenn es verworfen wird
-    if(energiediff < 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
+    if(energiediff <= 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
       grid.changeEntry(x, y);
       energie_allgemein += energiediff; //gesamtenergie ändert sich
+      magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);
     }else{ // wenn neue energie groesser -> erzeuge gleichverteilte zufallszahl auf [0,1] und vergleiche mit boltzmannfaktor
       double zufallszahl = drand48();
       double boltzmann = exp(-beta*energiediff);
-      if (zufallszahl<boltzmann)
+      if (zufallszahl<boltzmann){
         grid.changeEntry(x, y); // wenn boltzmannfaktor groesser aktzeptiere
         energie_allgemein += energiediff;
+        magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);}
     }
   }
   energyfile.close();
+  magnetfile.close();
+  absmagnetfile.close();
 
 
   //ausgabe
@@ -116,16 +149,62 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
     matrix.close();
   }
 
+// zweite funktion fuer temperaturplot
+void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& grid){
+  //Gitter initialisieren
+  int gitterGroesse = grid.getGitterGroesse();
+  double beta = pow(kbT, -1);
 
+  //magnetisierung
+  ofstream magnetfile;
+  magnetfile.open("build/magnet"+dateiname+".txt");
+  double magnetisierung_allgemein = grid.getMagnetisierung();
+
+  //magnetisierungabs
+  ofstream absmagnetfile;
+  absmagnetfile.open("build/absmagnet"+dateiname+".txt");
+  // double absmagnetisierung_allgemein = grid.getabsMagnetisierung();
+
+
+  //Metropolis
+  int wieVielWerte = 1e4;
+  for (int i = 0; i < schritte; i++) {
+    if(i%((int)schritte/wieVielWerte)== 0){
+    magnetfile << magnetisierung_allgemein << " " << i/1e3 << "\n";
+    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/1e3 << "\n";
+  }
+    int x = drand48()*gitterGroesse;
+    int y = drand48()*gitterGroesse;
+
+    double energiediff = grid.getEnergyDiff(x, y);
+    //energyfile << energiediff/pow(gitterGroesse, 2) << "\n";
+    //wieder ändern wenn es verworfen wird
+    if(energiediff <= 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
+      grid.changeEntry(x, y);
+      energie_allgemein += energiediff; //gesamtenergie ändert sich
+      magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);
+    }else{ // wenn neue energie groesser -> erzeuge gleichverteilte zufallszahl auf [0,1] und vergleiche mit boltzmannfaktor
+      double zufallszahl = drand48();
+      double boltzmann = exp(-beta*energiediff);
+      if (zufallszahl<boltzmann){
+        grid.changeEntry(x, y); // wenn boltzmannfaktor groesser aktzeptiere
+        energie_allgemein += energiediff;
+        magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);}
+    }
+  }
+  magnetfile.close();
+  absmagnetfile.close();
+
+}
 
 
 
 int main() {
   cout << "its something" << endl;
   int schritteaufwaerm = 1e4;
-  int sweeeeeeeeeeeeep = 1e7;
+  int sweeeeeeeeeeeeep = 1e6;
   gitter gridGleich1(true);
-  gitter gridGleich2(false);
+  gitter gridGleich2(true);
   gitter gridZufall1(false);
   gitter gridZufall2(false);
   gitter gridZufall3(false);
@@ -134,7 +213,8 @@ int main() {
   zweiDimensionenIsing(schritteaufwaerm, 1, "kbTgleicheins", gridZufall1);
   zweiDimensionenIsing(schritteaufwaerm, 2, "kbTgleichzwei", gridZufall2);
   zweiDimensionenIsing(schritteaufwaerm, 3, "kbTgleichdrei", gridZufall3);
-  cout << "alle Systeme aufgwärmt" << endl;
+  cout << "alle Systeme aufgewärmt" << endl;
+
 
   //sweep
   zweiDimensionenIsing(sweeeeeeeeeeeeep, 1, "kbTgleicheins_sweep", gridZufall1);

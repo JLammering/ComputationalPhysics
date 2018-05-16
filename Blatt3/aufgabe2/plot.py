@@ -9,16 +9,24 @@ def plotMatrix(matrix, dateiname):
 
     x = np.arange(0, len(matrix))
     plt.pcolormesh(x, x, matrix)
-    plt.savefig("build/" + dateiname + ".pdf")
+    plt.colorbar(label='Spin')
+    plt.savefig("build/plots/" + dateiname + ".pdf")
     plt.close()
 
 
-def plotEnergie(energie, schritt, dateiname):
+def plotEnergie(schritt, energie, dateiname):
     ''' plottet die Energie'''
     plt.plot(schritt, energie)
-    plt.xlabel("schritt")
+    plt.xlabel("sweep")
     plt.ylabel("energie")
-    plt.savefig("build/energie"+dateiname+".pdf")
+    plt.savefig("build/plots/energie"+dateiname+".pdf")
+    plt.close()
+
+def plotMagnetisierung(schritt, magnetisierung, dateiname, yachse):
+    plt.plot(schritt, magnetisierung)
+    plt.xlabel("sweep")
+    plt.ylabel(yachse)
+    plt.savefig("build/plots/"+dateiname+".pdf")
     plt.close()
 
 
@@ -33,8 +41,15 @@ if __name__ == '__main__':
     for i, elem in enumerate(endungen):
         matrix = np.genfromtxt('build/kbTgleich'+elem+'.txt', unpack='True')
         plotMatrix(matrix, 'kbTgleich' + elem)
+
         energie, schritte = np.genfromtxt('build/energiekbTgleich'+elem+'.txt', unpack='True')
-        plotEnergie(energie, schritte, 'kbTgleich'+elem)
+        plotEnergie(schritte, energie, 'kbTgleich'+elem)
+
+        magnetisierung, schritte = np.genfromtxt('build/magnetkbTgleich'+elem+'.txt', unpack='True')
+        plotMagnetisierung(schritte, magnetisierung, 'magnetkbTgleich'+elem, "<m>")
+
+        absmagnet, schritte = np.genfromtxt('build/absmagnetkbTgleich'+elem+'.txt', unpack='True')
+        plotMagnetisierung(schritte, absmagnet, 'absmagnetkbTgleich'+elem, "<|m|>")
         print("plotted"+elem)
 
     # energie

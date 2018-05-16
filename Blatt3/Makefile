@@ -11,12 +11,13 @@ build/magnetisierung.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py
      # ./aufgabe2.out
      # python aufgabe2/plot.py
 
-build/kbTgleicheins.pdf: aufgabe2/aufgabe2.cpp aufgabe2/plot.py
+build/plots/kbTgleicheins.pdf: aufgabe2/aufgabe2.cpp aufgabe2/plot.py
+	mkdir -p build/plots
 	${CC} ${OPT} aufgabe2/aufgabe2.cpp -o aufgabe2.out
 	./aufgabe2.out
 	python aufgabe2/plot.py
 
-build/main.pdf: build/magnetisierung.pdf build/kbTgleicheins.pdf
+build/main.pdf: build/magnetisierung.pdf build/plots/kbTgleicheins.pdf
 
 
 build/main.pdf: FORCE | build
