@@ -86,7 +86,6 @@ public:
 };
 
 void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& grid){
-  //Gitter initialisieren
   int gitterGroesse = grid.getGitterGroesse();
   double beta = pow(kbT, -1);
 
@@ -103,16 +102,13 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
   //magnetisierungabs
   ofstream absmagnetfile;
   absmagnetfile.open("build/absmagnet"+dateiname+".txt");
-  // double absmagnetisierung_allgemein = grid.getabsMagnetisierung();
-
 
   //Metropolis
-  int wieVielWerte = 1e4;
   for (int i = 0; i < schritte; i++) {
-    if(i%((int)schritte/wieVielWerte)== 0){
-    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i/wieVielWerte<< "\n";
-    magnetfile << magnetisierung_allgemein << " " << i/wieVielWerte << "\n";
-    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/wieVielWerte << "\n";
+    if(i%(10000)== 0){//pro sweep ein messpunkt
+    energyfile << energie_allgemein / pow(gitterGroesse, 2) << " " << i/1e4<< "\n";
+    magnetfile << magnetisierung_allgemein << " " << i/1e4 << "\n";
+    absmagnetfile << abs(magnetisierung_allgemein) << " " << i/1e4 << "\n";
   }
     int x = drand48()*gitterGroesse;
     int y = drand48()*gitterGroesse;
@@ -177,6 +173,9 @@ void TempZweiDimensionenIsing(int schritte, string dateiname){
 
 
   for( int iter = 0; iter < temperaturen.size(); iter ++){
+    if(iter%12==0){
+      cout << "Temperatur = " << temperaturen.at(iter) << endl;
+    }
   //Gitter initialisieren
   gitter grid(false);
   int gitterGroesse = grid.getGitterGroesse();
@@ -220,10 +219,13 @@ void TempZweiDimensionenIsing(int schritte, string dateiname){
 
 int main() {
   cout << "its something" << endl;
-  int schritteaufwaerm = 1e4;
-  int sweeeeeeeeeeeeep = 1e6;
+  int schritteprosweep = 1e4;
+  int schritteaufwaerm = 400*schritteprosweep;
+  int sweeeeeeeeeeeeep = 1e4*schritteprosweep;
+  int tempschritte = 1e3*schritteprosweep; //am ende 1e3 einstellen
   gitter gridGleich1(true);
   gitter gridGleich2(true);
+  gitter gridGleich3(true);
   gitter gridZufall1(false);
   gitter gridZufall2(false);
   gitter gridZufall3(false);
@@ -232,6 +234,10 @@ int main() {
   zweiDimensionenIsing(schritteaufwaerm, 1, "kbTgleicheins", gridZufall1);
   zweiDimensionenIsing(schritteaufwaerm, 2, "kbTgleichzwei", gridZufall2);
   zweiDimensionenIsing(schritteaufwaerm, 3, "kbTgleichdrei", gridZufall3);
+
+  zweiDimensionenIsing(schritteaufwaerm, 1, "kbTgleicheinsgleich", gridGleich1);
+  zweiDimensionenIsing(schritteaufwaerm, 2, "kbTgleichzweigleich", gridGleich2);
+  zweiDimensionenIsing(schritteaufwaerm, 3, "kbTgleichdreigleich", gridGleich3);
   cout << "alle Systeme aufgewärmt" << endl;
 
 
@@ -244,7 +250,8 @@ int main() {
   cout << "dritter sweeeeeeeeeeeeep" << endl;
 
   //tempplots
-  TempZweiDimensionenIsing(sweeeeeeeeeeeeep, "datei");
+  cout << "Temperaturenplots" << endl;
+  TempZweiDimensionenIsing(tempschritte, "datei");
 
 
   return 0;

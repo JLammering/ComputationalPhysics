@@ -16,40 +16,39 @@ def plotMatrix(matrix, dateiname):
 
 def plotEnergie(schritt, energie, dateiname):
     ''' plottet die Energie'''
-    plt.plot(schritt, energie)
+    plt.plot(schritt, energie, '.')
     plt.xlabel("sweep")
-    plt.ylabel("energie")
+    plt.ylabel("energie/spin")
     plt.savefig("build/plots/energie"+dateiname+".pdf")
     plt.close()
 
 
 def plotMagnetisierung(schritt, magnetisierung, dateiname, yachse):
-    plt.plot(schritt, magnetisierung)
+    plt.plot(schritt, magnetisierung, '.')
     plt.xlabel("sweep")
-    plt.ylabel(yachse)
+    plt.ylabel(yachse+"/spin")
     plt.savefig("build/plots/"+dateiname+".pdf")
     plt.close()
 
 
 def plotTempAbhaengig(temperaturen, magnetisierung, dateiname, yachse):
-    plt.plot(temperaturen, magnetisierung)
-    plt.xlabel("T")
-    plt.ylabel(yachse)
+    plt.plot(temperaturen, magnetisierung, '.')
+    plt.xlabel("kB*T")
+    plt.ylabel(yachse+"/spin")
     plt.savefig("build/plots/"+dateiname+".pdf")
     plt.close()
 
 
 if __name__ == '__main__':
-    # kbT = 1
-    # matrix1 = np.genfromtxt('build/kbT=1.txt', unpack='True')
-    # plotMatrix(matrix1, 'kbTgleicheins')
-    # matrix3 = np.genfromtxt('build/kbT=3.txt', unpack='True')
-    # plotMatrix(matrix3, 'kbTgleichdrei')
 
     endungen =("eins", "zwei", "drei", "eins_sweep", "zwei_sweep", "drei_sweep")
     for i, elem in enumerate(endungen):
         matrix = np.genfromtxt('build/kbTgleich'+elem+'.txt', unpack='True')
         plotMatrix(matrix, 'kbTgleich' + elem)
+
+        if i == 0 or i == 1 or i == 2:  # äquilibrierungsphase
+            energie, schritte = np.genfromtxt('build/energiekbTgleich'+elem+'gleich.txt', unpack='True')
+            plotEnergie(schritte, energie, 'kbTgleich'+elem+'gleich')
 
         energie, schritte = np.genfromtxt('build/energiekbTgleich'+elem+'.txt', unpack='True')
         plotEnergie(schritte, energie, 'kbTgleich'+elem)
