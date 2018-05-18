@@ -58,6 +58,22 @@ public:
     return -1*(double)energie_berechnet;
   }
 
+  double getsquaredEnergy(){ // berechnet <H²>
+    int squaredenergie_berechnet = 0;
+    int gg = getGitterGroesse();
+    for (int j = 0; j < gg; j++) {  // zeilen
+      for (int l = 0; l < gg; l++){ // spalten
+        squaredenergie_berechnet +=
+              pow(getEntry(j, l)*(getEntry(((j+1)%gg+gg)%gg, l) +
+              getEntry(((j-1)%gg+gg)%gg, l) +
+              getEntry(j, ((l-1)%gg+gg)%gg) +
+              getEntry(j, ((l+1)%gg+gg)%gg)), 2); // addiere quadrierte energien
+      }
+      return (double)squaredenergie_berechnet;
+    }
+  }
+
+
   double getEnergyDiff(int j, int l){
     int spin_aktuell = getEntry(j, l);
     int gg = getGitterGroesse();
@@ -68,6 +84,7 @@ public:
 
     return 2*energie_lokal;
   }
+
 
   double getMagnetisierung(){
     int gg = getGitterGroesse();
@@ -103,6 +120,7 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
   ofstream absmagnetfile;
   absmagnetfile.open("build/absmagnet"+dateiname+".txt");
 
+
   //Metropolis
   for (int i = 0; i < schritte; i++) {
     if(i%(10000)== 0){//pro sweep ein messpunkt
@@ -114,6 +132,7 @@ void zweiDimensionenIsing(int schritte, double kbT, string dateiname, gitter& gr
     int y = drand48()*gitterGroesse;
 
     double energiediff = grid.getEnergyDiff(x, y);
+    //double getsquaredEnergyDiff = grid.getsquaredEnergyDiff(x, y);
     //energyfile << energiediff/pow(gitterGroesse, 2) << "\n";
     //wieder ändern wenn es verworfen wird
     if(energiediff <= 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
@@ -156,6 +175,14 @@ void templiste(vector<double>& temperaturen, double start, double ende, double s
 // zweite funktion fuer temperaturplot
 void TempZweiDimensionenIsing(int schritte, string dateiname){
 
+  //energie
+  ofstream energyfile;
+  energyfile.open("build/energie"+dateiname+".txt");
+
+  // spezifische waerme
+  ofstream cfile;
+  cfile.open("build/tempspezwaerme"+dateiname+".txt");
+
   //magnetisierung
   ofstream magnetfile;
   magnetfile.open("build/tempmagnet"+dateiname+".txt");
@@ -182,6 +209,8 @@ void TempZweiDimensionenIsing(int schritte, string dateiname){
 
   double kbT = temperaturen.at(iter);
   double magnetisierung_allgemein = grid.getMagnetisierung();
+  double energie_allgemein = grid.getEnergy();
+  double squared_energie = grid.getsquaredEnergy(); // hier wird nur <H²> gespeichert, spezifische waerme wird beim schreiben in datei berechnet
   double beta = pow(kbT, -1);
 
   //Metropolis
@@ -196,15 +225,21 @@ void TempZweiDimensionenIsing(int schritte, string dateiname){
     //wieder ändern wenn es verworfen wird
     if(energiediff <= 0){// wenn alte energie groesser als neue -> aktzeptiere neuen zustand
       grid.changeEntry(x, y);
+      energie_allgemein += energiediff; //gesamtenergie ändert sich
       magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);
     }else{ // wenn neue energie groesser -> erzeuge gleichverteilte zufallszahl auf [0,1] und vergleiche mit boltzmannfaktor
       double zufallszahl = drand48();
       double boltzmann = exp(-beta*energiediff);
       if (zufallszahl<boltzmann){
         grid.changeEntry(x, y); // wenn boltzmannfaktor groesser aktzeptiere
+        energie_allgemein += energiediff; //gesamtenergie ändert sich
         magnetisierung_allgemein += 2 * grid.getEntry(x, y) / pow((double)gitterGroesse, 2);}
     }
   }
+
+  // alle groessen von interesse abspeichern
+  const double const_kb = 1.3806503e-23; // boltzmann konstante um gleich spez.waerme ohne explizites T zu schreiben
+  cfile << const_kb * pow(beta, 2)* (grid.getsquaredEnergy() - pow(energie_allgemein, 2)) / (pow(gitterGroesse, 2))<< " " << temperaturen.at(iter) << "\n"; // hier wird spezifische waerme abgespeichert
   magnetfile << magnetisierung_allgemein << " " << temperaturen.at(iter) << "\n";
   absmagnetfile << abs(magnetisierung_allgemein) << " " << temperaturen.at(iter) << "\n";
 }
@@ -221,7 +256,7 @@ int main() {
   cout << "its something" << endl;
   int schritteprosweep = 1e4;
   int schritteaufwaerm = 400*schritteprosweep;
-  int sweeeeeeeeeeeeep = 1e4*schritteprosweep;
+  int sweeeeeeeeeeeeep = 1e1*schritteprosweep; // !!!am ende auf 1e4 aendern!!!
   int tempschritte = 1e3*schritteprosweep; //am ende 1e3 einstellen
   gitter gridGleich1(true);
   gitter gridGleich2(true);

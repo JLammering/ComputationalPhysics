@@ -35,6 +35,7 @@ def plotTempAbhaengig(temperaturen, magnetisierung, dateiname, yachse):
     plt.plot(temperaturen, magnetisierung, '.')
     plt.xlabel("kB*T")
     plt.ylabel(yachse+"/spin")
+    plt.tightlayout(pad=0, h_bad=1.08, w_pad=1.08)
     plt.savefig("build/plots/"+dateiname+".pdf")
     plt.close()
 
@@ -64,3 +65,5 @@ if __name__ == '__main__':
     plotTempAbhaengig(temperaturen, tempmagnet, "tempmagnet", "<m>")
     tempmagnet, temperaturen = np.genfromtxt('build/tempabsmagnetdatei.txt', unpack='True')
     plotTempAbhaengig(temperaturen, tempmagnet, "abstempmagnet", "<|m|>")
+    spezwaerme, temperaturen = np.genfromtxt('build/tempspezwaermedatei.txt', unpack='True')
+    plotTempAbhaengig(temperaturen, spezwaerme, "spezwaerme", "c(T)/kB")
