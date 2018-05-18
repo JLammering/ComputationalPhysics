@@ -69,8 +69,8 @@ public:
               getEntry(j, ((l-1)%gg+gg)%gg) +
               getEntry(j, ((l+1)%gg+gg)%gg)), 2); // addiere quadrierte energien
       }
-      return (double)squaredenergie_berechnet;
     }
+    return (double)squaredenergie_berechnet;
   }
 
 
@@ -256,7 +256,7 @@ int main() {
   cout << "its something" << endl;
   int schritteprosweep = 1e4;
   int schritteaufwaerm = 400*schritteprosweep;
-  int sweeeeeeeeeeeeep = 1e1*schritteprosweep; // !!!am ende auf 1e4 aendern!!!
+  int sweeeeeeeeeeeeep = 1e4*schritteprosweep; // !!!am ende auf 1e4 aendern!!!
   int tempschritte = 1e3*schritteprosweep; //am ende 1e3 einstellen
   gitter gridGleich1(true);
   gitter gridGleich2(true);

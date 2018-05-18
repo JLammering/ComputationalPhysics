@@ -13,3 +13,5 @@ Debug/
 *.log
 *.fdb_latexmk
 *.fls
+build/
+*.o
