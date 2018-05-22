@@ -36,7 +36,7 @@ public:
   }
 
   int getEntry(int x, int y){
-    return gitter_array[x][y];
+    return gitter_array[(x % gitterGroesse + gitterGroesse)%gitterGroesse][(y % gitterGroesse + gitterGroesse)%gitterGroesse];
   }
 
   void changeEntry(int x, int y){
