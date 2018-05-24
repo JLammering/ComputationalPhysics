@@ -12,7 +12,7 @@ def plotMatrix(matrix, dateiname):
     plt.colorbar(label='Spin')
     plt.savefig("build/plots/" + dateiname + ".pdf")
     plt.close()
-
+    
 
 def plotEnergie(schritt, energie, dateiname):
     ''' plottet die Energie'''
