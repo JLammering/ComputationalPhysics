@@ -13,6 +13,8 @@
 #include <queue>
 #include <vector>
 #include <algorithm>
+#include <deque>
+
 using namespace std;
 
 struct gitterplatz{
@@ -29,15 +31,21 @@ public:
 	int get_eintrag(){return eintrag;}
 	bool get_besucht(){return besucht;}
 
-}
+};
 
 
 class gitter{
   private:
-    int gitterGroesse = 100;
-    gitterplatz gitter_array[100][100];
+    int gitterGroesse = 30;
+    gitterplatz gitter_array[30][30];
+		int orientierungen;
+		deque<int> orientliste;
+
 public:
-  gitter(int orientierungen){//Konstruktor
+  gitter(int orientierungen_set){//Konstruktor
+		orientierungen = orientierungen_set;
+		for (int o_iter=0; o_iter<orientierungen; o_iter++) orientliste.push_back(o_iter);
+
 		double wkeit = 1.0 / (double)orientierungen;
 		for (int i = 0; i < gitterGroesse; i++) {//zeilen
       for (int k = 0; k < gitterGroesse; k++) {//spalten
@@ -59,16 +67,26 @@ public:
     return gitter_array[(x % gitterGroesse + gitterGroesse)%gitterGroesse][(y % gitterGroesse + gitterGroesse)%gitterGroesse].get_eintrag();
   }
 
-  void changeEntry(int x, int y){//bisher nur für q=2 implementiert
-    gitter_array[x][y].set_eintrag(gitter_array[x][y].get_eintrag()*=-1);
+  void changeEntry(int x, int y, int ziel){//bisher nur für q=2 implementiert
+	// orientliste.erase(getEntry(x, y));
+	// 			double rnd = drand48();
+	// 			for( int i_orient = 0; i_orient < orientierungen - 1; i_orient++){
+	// 				if ((rnd >  (i_orient) * 1/(orientierungen - 1)) && (rnd <  (i_orient + 1) * 1/(orientierungen - 1))){
+	// 					gitter_array[x][y].set_eintrag(orientliste.at(i_orient));
+	// 				}
+	// 			}
+	// orientliste.emplace(getEntry(x, y), getEntry(x,y));
+	gitter_array[x][y].set_eintrag(ziel);
+
+
   }
 
 	void setBesucht(int x, int y){
-		gitter_array[x][y].set_besucht(true);
+		gitter_array[(x % gitterGroesse + gitterGroesse)%gitterGroesse][(y % gitterGroesse + gitterGroesse)%gitterGroesse].set_besucht(true);
 	}
 
 	bool getBesucht(int x, int y){
-		return gitter_array[x][y].get_besucht();
+		return gitter_array[(x % gitterGroesse + gitterGroesse)%gitterGroesse][(y % gitterGroesse + gitterGroesse)%gitterGroesse].get_besucht();
 	}
 
 	//
@@ -130,15 +148,17 @@ public:
 
 
 
-void wolffAlgorithmus(gitter& grid, int schritte, double kbT){
+void wolffAlgorithmus(gitter& grid, int schritte, double kbT, int q){
   int gg = grid.getGitterGroesse();
   double beta = 1.0/kbT;
   double J = 1;
   double p_C = 1-exp(-2.0*beta*J);
 
-  for (size_t i = 0; i < schritte; i++) {
-    double anfangs_x = drand48()*gg;
-    double anfangs_y = drand48()*gg;
+  for (size_t t = 0; t < schritte; t++) {
+		grid.absaven("2DTESTRUN"	+ to_string(t));
+
+    int anfangs_x = drand48()*gg;
+    int anfangs_y = drand48()*gg;
 
     queue<position> unbesuchteSpins;
     queue<position> cluster;
@@ -150,11 +170,10 @@ void wolffAlgorithmus(gitter& grid, int schritte, double kbT){
 
     while (!unbesuchteSpins.empty()) {
     position aktuell = unbesuchteSpins.front();
-
 		unbesuchteSpins.pop();
 
-		x = aktuell.get_x();
-		y = aktuell.get_y();
+		int x = aktuell.get_x();
+		int y = aktuell.get_y();
     position nachbar(-1,-1, gg);
 
 
@@ -162,6 +181,7 @@ void wolffAlgorithmus(gitter& grid, int schritte, double kbT){
       for (int j = -1; j <= 1; j++) {
         if (abs(i + j) == 1) {
           if(!grid.getBesucht(x+i, y+j) && richtung == grid.getEntry(x+i, y+j) && drand48() < p_C){//wenn er noch nicht besucht wurde, die richtung die ist vom initialen Spin und die Wkeit stimmt:
+						cout << "x+i" << x+i << "y"<< y+j   <<endl;
             nachbar.setting((x+i), (y+j));
             cluster.push(nachbar);
             unbesuchteSpins.push(nachbar);
@@ -170,10 +190,14 @@ void wolffAlgorithmus(gitter& grid, int schritte, double kbT){
       }
     }
 		grid.setBesucht(x, y);//den gitterplatz markieren, dass er besucht wurde
-  }
+  } //unbesuchteSpins Schleife
 
-  }//schritte Schleife ende
-
+	while(!cluster.empty()) {//cluster flippen
+		int zielflip = (int)(richtung + (drand48()*(q-1)+1)) % q;//nochmal drüber nachdenken
+		grid.changeEntry(cluster.front().get_x(), cluster.front().get_y(), zielflip);
+		cluster.pop();
+	}
+  } //schritte Schleife end
 }
 
 
@@ -185,9 +209,11 @@ double b_crit(int q){
 int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 
-  gitter grid(2);
+	int q = 2; // anzahl
+  gitter grid(q);
   grid.absaven("thisisatest");
-  wolffAlgorithmus(grid, 1, 1);
+  wolffAlgorithmus(grid, 10, 1, q);
+
 
 
 	return 0;

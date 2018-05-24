@@ -12,5 +12,8 @@ def plotMatrix(matrix, dateiname):
 
 
 if __name__ == '__main__':
-    mat = np.genfromtxt("build/thisisatest.txt", unpack='True')
-    plotMatrix(mat, "thisisatest")
+
+    anzahl_steps = 10
+    for i in range(anzahl_steps):
+        mat = np.genfromtxt("build/2DTESTRUN"+str(i)+".txt", unpack='True')
+        plotMatrix(mat, "2DTESTRUN"+str(i))
