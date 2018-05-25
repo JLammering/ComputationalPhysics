@@ -81,8 +81,8 @@ public:
 
   }
 
-	void setBesucht(int x, int y){
-		gitter_array[(x % gitterGroesse + gitterGroesse)%gitterGroesse][(y % gitterGroesse + gitterGroesse)%gitterGroesse].set_besucht(true);
+	void setBesucht(int x, int y, bool value){
+		gitter_array[x][y].set_besucht(value);
 	}
 
 	bool getBesucht(int x, int y){
@@ -134,9 +134,9 @@ private:
 	int gg;
 public:
   position(int x_setting, int y_setting, int gg_setting){
-    x= x_setting;
-    y = y_setting;
 		gg = gg_setting;
+    x= (x_setting%gg+gg)%gg;
+    y = (y_setting%gg+gg)%gg;
   }
   int get_x(){ return x;}
   int get_y(){ return y;}
@@ -157,6 +157,7 @@ void wolffAlgorithmus(gitter& grid, int schritte, double kbT, int q){
   for (size_t t = 0; t < schritte; t++) {
 		grid.absaven("2DTESTRUN"	+ to_string(t));
 
+
     int anfangs_x = drand48()*gg;
     int anfangs_y = drand48()*gg;
 
@@ -169,32 +170,37 @@ void wolffAlgorithmus(gitter& grid, int schritte, double kbT, int q){
     int richtung = grid.getEntry(anfangs_x, anfangs_y);
 
     while (!unbesuchteSpins.empty()) {
-    position aktuell = unbesuchteSpins.front();
-		unbesuchteSpins.pop();
 
+    position aktuell = unbesuchteSpins.front();
 		int x = aktuell.get_x();
 		int y = aktuell.get_y();
-    position nachbar(-1,-1, gg);
+		unbesuchteSpins.pop();
 
 
-    for (int i = -1; i <= 1; i++) { // erzeuge alle moeglichen Schritte um NN zu erreichen
+    for (int i = -1; i <= 1; i++) { // erzeuge alle moeglichen Schritte um Nachbarn zu erreichen
       for (int j = -1; j <= 1; j++) {
-        if (abs(i + j) == 1) {
-          if(!grid.getBesucht(x+i, y+j) && richtung == grid.getEntry(x+i, y+j) && drand48() < p_C){//wenn er noch nicht besucht wurde, die richtung die ist vom initialen Spin und die Wkeit stimmt:
-						cout << "x+i" << x+i << "y"<< y+j   <<endl;
-            nachbar.setting((x+i), (y+j));
+        if (abs(i + j) == 1) {//nur NN
+					double rnd = drand48();
+					cout << (!grid.getBesucht(x+i, y+j)) << (richtung == grid.getEntry(x+i, y+j)) << (rnd < p_C) << endl;
+          if(!grid.getBesucht(x+i, y+j) && richtung == grid.getEntry(x+i, y+j) && rnd < p_C){//wenn er noch nicht besucht wurde, die richtung die ist vom initialen Spin und die Wkeit stimmt:
+						cout << "guter Nachbar gefunden" << endl;
+						position nachbar((x+i), (x+j), gg);
             cluster.push(nachbar);
             unbesuchteSpins.push(nachbar);
           }
         }
       }
     }
-		grid.setBesucht(x, y);//den gitterplatz markieren, dass er besucht wurde
+		grid.setBesucht(x, y, true);//den gitterplatz markieren, dass er besucht wurde
+		cout << "cluster.size()=" << cluster.size() << "unbesuchteSpins.size()=" << unbesuchteSpins.size()<<endl;
   } //unbesuchteSpins Schleife
-
+	cout << "cluster gebildet" << "mit größe"<<cluster.size()<<endl;
+	int zielflip = (int)(richtung + (drand48()*(q-1)+1)) % q;//nochmal drüber nachdenken
+	cout << "cluster flippen von " << richtung << " nach " << zielflip<< endl;
 	while(!cluster.empty()) {//cluster flippen
-		int zielflip = (int)(richtung + (drand48()*(q-1)+1)) % q;//nochmal drüber nachdenken
+		cout << "position" <<  cluster.front().get_x()<< cluster.front().get_y() << endl;
 		grid.changeEntry(cluster.front().get_x(), cluster.front().get_y(), zielflip);
+		grid.setBesucht(cluster.front().get_x(), cluster.front().get_y(), false);
 		cluster.pop();
 	}
   } //schritte Schleife end
@@ -211,10 +217,7 @@ int main() {
 
 	int q = 2; // anzahl
   gitter grid(q);
-  grid.absaven("thisisatest");
-  wolffAlgorithmus(grid, 10, 1, q);
-
-
+  wolffAlgorithmus(grid, 2, 1, q);
 
 	return 0;
 }
