@@ -17,12 +17,11 @@ typedef Matrix<double, 5, 5> Matrix5d;
 
 void householder(Matrix5d& A){
 	int N = A.rows();
-	for (size_t n = 1; n <= N-2; n++) {
+	for (size_t n = 1; n <= N-2; n++) {//Transformation N-2 mal
 		MatrixXd v(N-n, 1);
 		v = A.col(n-1).tail(N-n);
-		//cout << "v="<<v<<endl;
-		double k = sqrt(v.squaredNorm()); // die quadratische Summe der letzten  (N-n) Zahlen von der n-ten Spalte// Vorzeichen ??
-		k = copysign(abs(k), -A(n+1, n));
+		double k = sqrt(v.squaredNorm()); // die quadratische Summe der letzten  (N-n) Zahlen von der n-ten Spalte
+		k = copysign(abs(k), -A(n, n-1)); // um Rundungsfehler zu vermeiden
 		MatrixXd u(N-n, 1);
 		u = (v-k*VectorXd::Unit(N-n, 0))/sqrt((v-k*VectorXd::Unit(N-n, 0)).squaredNorm());
 
@@ -50,7 +49,7 @@ void jacobiRotation(double epsilon, Matrix5d& A){
 		double t = copysign(1.0, theta)/(abs(theta) + sqrt(pow(theta, 2) + 1));
 		double c = 1/sqrt(1 + pow(t, 2));
 		double s = t*c;
-		MatrixXd P(N, N);
+		MatrixXd P(N, N);//Transformationsmatrix aus Koeffizienten zusammenbauen
 		P = MatrixXd::Identity(N, N);
 		P(p,p) = c;
 		P(q, q) = c;
@@ -89,7 +88,7 @@ int main() {
 	matrixDiagonalisierung(M);
 	VectorXd eigenwertePH(5);
 	eigenwertePH = M.diagonal();
-	absaven("perHand",eigenwertePH);
+	absaven("perHand", eigenwertePH);
 
 	//b)
 	EigenSolver<Matrix5d> es(B);

@@ -7,7 +7,7 @@ build/plot.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py
 	mkdir -p build/plots
 	${CC} ${OPT} aufgabe1/aufgabe1.cpp -o aufgabe1.out
 	./aufgabe1.out
-	#python aufgabe1/plot.py
+	python3 aufgabe1/plot.py
 
 build/main.pdf: build/plot.pdf
 
