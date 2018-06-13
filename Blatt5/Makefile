@@ -15,6 +15,11 @@ build/plots/matrix.pdf: aufgabe2/aufgabe2.cpp# aufgabe2/plot.py
 	./aufgabe2.out
 	#python3 aufgabe1/plot.py
 
+# build/plots/matrix.pdf: aufgabe2/aufgabe2.cpp# aufgabe2/plot.py
+#
+# 	${CC} ${OPT} aufgabe2/aufgabe2.cpp -o aufgabe2.out
+# 	./aufgabe2.out
+
 
 build/main.pdf: FORCE | build build/plots/perHand.pdf build/plots/matrix.pdf
 	latexmk \
