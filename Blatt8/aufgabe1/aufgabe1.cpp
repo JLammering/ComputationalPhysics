@@ -78,13 +78,13 @@ void absaven(MatrixXd M){//gesamte MAtrix in datei schreiben
 
 int main() {
 	VectorXd rAnfang(2);
-	rAnfang << 0.1, sqrt(2)*0.1;
+	rAnfang << 0, 3.14;
 	VectorXd vAnfang(2);
-	vAnfang << 0, 0;
+	vAnfang << 0, 2;
 
 	//a
 	cout << rungekutta4(rAnfang, vAnfang, 3, 3, kraftfeldDP) << endl;
-	absaven(rungekutta4(rAnfang, vAnfang, 20, 20, kraftfeldDP));
+	absaven(rungekutta4(rAnfang, vAnfang, 15, 20*15, kraftfeldDP));
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;

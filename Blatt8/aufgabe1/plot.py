@@ -1,5 +1,5 @@
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 #
 # def plotting():
@@ -18,10 +18,6 @@ import sys
 
 theta1, theta2, theta1punkt, theta2punkt = np.genfromtxt("build/auslenk.txt", unpack=True)
 
-theta1 = theta1[0]
-theta2 = theta2[0]
-theta1punkt = theta1punkt[0]
-theta2punkt = theta2punkt[0]
 plt.plot(theta1)
 plt.plot(theta2)
 
@@ -48,8 +44,8 @@ plt.tight_layout(pad=0)
 plt.savefig('build/energie.pdf')
 plt.close()
 
-fig  = plt.figure()
-ax   = plt.subplot(111)
+fig = plt.figure()
+ax = plt.subplot(111)
 
 def animate(t):
     print('\r{}'.format(t), end='')
@@ -61,7 +57,7 @@ def animate(t):
     return plot
 
 #writer = animation.ImageMagickWriter(fps=25)
-ani = animation.FuncAnimation(fig, animate, frames=len(theta1))
+ani = animation.FuncAnimation(fig, animate, frames=int(len(theta1)))
 #plt.show()
-#ani.save('build/anim.mp4', fps=50)
+ani.save('build/anim.mp4', fps=10)
 #print()
