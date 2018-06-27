@@ -12,14 +12,14 @@
 #include <fstream>
 using namespace std;
 using namespace Eigen;
-
+//orientiert am Kierfeldskript
 VectorXd kraftfeldHO(VectorXd r){
 	return -r;
 }
 
-VectorXd fvector(VectorXd y, function<VectorXd(VectorXd)> kraftfeld){
+VectorXd fvector(VectorXd y, function<VectorXd(VectorXd)> kraftfeld){//allgemeiner fvector
 	VectorXd f_rueck(y.rows());
-	f_rueck << y.tail(y.rows()/2), kraftfeld(y.head(y.rows()/2));
+	f_rueck << y.tail(y.rows()/2), kraftfeld(y.head(y.rows()/2));//oben die unteren drei Spalten vom mitgegebenen Vektor. unten die oberen drei
 	return f_rueck;
 }
 
@@ -28,15 +28,15 @@ MatrixXd euler(VectorXd rAnfang, VectorXd vAnfang, double T, int N, function<Vec
 	//erste Spalte
 	int dimanfang = rAnfang.rows();
 	VectorXd y_0(dimanfang*2);//
-	y_0 << rAnfang, vAnfang;
+	y_0 << rAnfang, vAnfang;//obere drei Zeilen Ortskoordianten untere drei Geschwindigkeitsvektoren
 	int dim = dimanfang*2;
-	MatrixXd Y_Matrix = MatrixXd::Zero(dim, N+1);
+	MatrixXd Y_Matrix = MatrixXd::Zero(dim, N+1);//MAtrix in der jede Spalte ein Zeitschritt ist
 	Y_Matrix.col(0) = y_0;
 	double h = T / N;
 	//andere Spalten
 	for(size_t i = 1 ; i <= N ; i++ )
 	{
-		Y_Matrix.col(i) = h*fvector(Y_Matrix.col(i-1), kraftfeld);
+		Y_Matrix.col(i) = h*fvector(Y_Matrix.col(i-1), kraftfeld);//nach definition
 		Y_Matrix.col(i) += Y_Matrix.col(i-1);
 	}
 	return Y_Matrix;
@@ -88,12 +88,14 @@ MatrixXd rungekutta2(VectorXd rAnfang, VectorXd vAnfang, double T, int N, functi
 	return Y_Matrix;
 }
 
-void absaven(VectorXd V){
-	int dim = V.rows();
+void absaven(MatrixXd M){//gesamte MAtrix in datei schreiben
+	int dim = M.cols();
+	cout << "dim="<<dim;
 	ofstream myfile;
 	myfile.open("build/auslenkSchritt"+to_string(dim)+".txt");
-		for (size_t j = 0; j < dim; j++) {//durch auslenkungen
-			myfile << V(j)<< "\n";
+	myfile << "#x y z v_x v_y v_z\n";
+		for (size_t j = 0; j < dim; j++) {
+			myfile << M(0, j) <<" "<<M(1, j)<<" "<<M(2, j)<<" "<<M(3, j) <<" "<<M(4, j)<<" "<<M(5, j)<< "\n";
 		}
 	myfile.close();
 }
@@ -103,33 +105,26 @@ int main() {
 	rAnfang << 1, 1, 1;
 	VectorXd vAnfang(3);
 	vAnfang << 0, 0, 0;
-	int N = 30;
-	int T = 1;
-	MatrixXd E(rAnfang.rows()*2, N+1);
-	E = euler(rAnfang, vAnfang, T, N, kraftfeldHO);
-	MatrixXd R2(rAnfang.rows()*2, N+1);
-	R2 = rungekutta2(rAnfang, vAnfang, T, N, kraftfeldHO);
-	MatrixXd R4(rAnfang.rows()*2, N+1);
-	R4 = rungekutta4(rAnfang, vAnfang, T, N, kraftfeldHO);
-	cout << E << endl<<endl;
-	cout << R2 << endl<<endl;
-	cout << R4 << endl;
 
 	//a
-	int schrittanfang = 5;
-	int schrittende = 50;
-	T = 5;
+	int T = 20;
 
 
-	for (size_t i = schrittanfang; i < schrittende; i++) {//Schritte
-		VectorXd V(i);
-		MatrixXd R4a(rAnfang.rows()*2, i+1);
-		R4a = rungekutta4(rAnfang, vAnfang, T, i, kraftfeldHO);
-		absaven(R4a.row(0).transpose());//x-Koordinate abspeichern
+	for (size_t i = 1; i <= 5; i++) {//Schritte
+		absaven(rungekutta4(rAnfang, vAnfang, T, i*1000, kraftfeldHO));//Matrix abspeichern
+		absaven(rungekutta4(rAnfang, vAnfang, T, i*100, kraftfeldHO));
+		absaven(euler(rAnfang, vAnfang, T, i*1000+2, kraftfeldHO));//mit 3 hinten bei den Schritten ist euler... +1 wegen dem anfangsvektor
+		absaven(euler(rAnfang, vAnfang, T, i*100+2, kraftfeldHO));
+		absaven(rungekutta2(rAnfang, vAnfang, T, i*1000+1, kraftfeldHO));
+		absaven(rungekutta2(rAnfang, vAnfang, T, i*100+1, kraftfeldHO));
+
 	}
+	//b
+	vAnfang << 1, 1, 1;//v neq 0
+	absaven(rungekutta4(rAnfang, vAnfang, T, 2999, kraftfeldHO));
 
-
-
+	vAnfang << 1, 0, 0;//v nparallel r
+	absaven(rungekutta4(rAnfang, vAnfang, T, 2998, kraftfeldHO));
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;

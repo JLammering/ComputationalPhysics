@@ -3,13 +3,13 @@ OPT= -std=c++11 -o3
 
 all: build/main.pdf
 
-build/101Schritten.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py
+build/plot.pdf: aufgabe1/aufgabe1.cpp aufgabe1/plot.py
 	mkdir -p build/plots
 	${CC} ${OPT} aufgabe1/aufgabe1.cpp -o aufgabe1.out
 	./aufgabe1.out
 	python aufgabe1/plot.py
 
-build/main.pdf: build/101Schritten.pdf
+build/main.pdf: build/plot.pdf
 
 
 build/main.pdf: FORCE | build

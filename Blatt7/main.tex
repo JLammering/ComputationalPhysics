@@ -3,9 +3,9 @@
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
 
-\title{Blatt template}
+\title{Blatt 7}
 \date{
-  Abgabe: 11.05.18
+  Abgabe: 22.06.18
 }
 
 \begin{document}
@@ -15,11 +15,241 @@ Wir stimmen für die mündliche Prüfung.
 Alle Dateien ausführbar mit der Makefile. %Der Output wird dann in die Datei\texttt{blatt2\_ausgabe.txt} geschrieben.
 \section*{Aufgabe 1}
 \subsection*{a)}
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk102Schritten.pdf}
+            \caption[Network2]%
+            {{\small Die Auslenkung bei 102 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk202Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 202 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk2002Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 2002 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk5002Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 5002 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist4}
+        \end{subfigure}
+    \end{figure*}
 
+    \begin{figure*}
+            \centering
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/zeitauslenk103Schritten.pdf}
+                \caption[Network2]%
+                {{\small Die Auslenkung bei 103 Zeitschritten und euler.}}
+                \label{fig:lcghist1}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/zeitauslenk203Schritten.pdf}
+                \caption[]%
+                {{\small Die Auslenkung bei 203 Zeitschritten und euler.}}
+                \label{fig:lcghist2}
+            \end{subfigure}
+            \vskip\baselineskip
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/zeitauslenk2003Schritten.pdf}
+                \caption[]%
+                {{\small Die Auslenkung bei 2003 Zeitschritten und euler.}}
+                \label{fig:lcghist3}
+            \end{subfigure}
+            \quad
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/zeitauslenk5003Schritten.pdf}
+                \caption[]%
+                {{\small Die Auslenkung bei 5003 Zeitschritten und euler.}}
+                \label{fig:lcghist4}
+            \end{subfigure}
+        \end{figure*}
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk101Schritten.pdf}
+            \caption[Network2]%
+            {{\small Die Auslenkung bei 101 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk201Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 201 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk2001Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 2001 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/zeitauslenk5001Schritten.pdf}
+            \caption[]%
+            {{\small Die Auslenkung bei 5001 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist4}
+        \end{subfigure}
+    \end{figure*}
+
+Die maximale Auslenkung wird bei rungekutta4 immer erreicht, aber bei kleinen Schrittweiten und Verfahren mit größeren Fehlerordnungen führen Rundungsfehler dazu, dass die Auslenkung sogar über eins hinausgeht.
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung102Schritten.pdf}
+            \caption[Network2]%
+            {{\small Die Energieerhaltung bei 102 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung202Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 202 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung4002Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 4002 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung5002Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 5002 Zeitschritten und rungekutta2.}}
+            \label{fig:lcghist4}
+        \end{subfigure}
+    \end{figure*}
+
+    \begin{figure*}
+            \centering
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/energieerhaltung103Schritten.pdf}
+                \caption[Network2]%
+                {{\small Die Energieerhaltung bei 103 Zeitschritten und euler.}}
+                \label{fig:lcghist1}
+            \end{subfigure}
+            \hfill
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/energieerhaltung203Schritten.pdf}
+                \caption[]%
+                {{\small Die Energieerhaltung bei 203 Zeitschritten und euler.}}
+                \label{fig:lcghist2}
+            \end{subfigure}
+            \vskip\baselineskip
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/energieerhaltung4003Schritten.pdf}
+                \caption[]%
+                {{\small Die Energieerhaltung bei 4003 Zeitschritten und euler.}}
+                \label{fig:lcghist3}
+            \end{subfigure}
+            \quad
+            \begin{subfigure}[b]{0.475\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{build/energieerhaltung5003Schritten.pdf}
+                \caption[]%
+                {{\small Die Energieerhaltung bei 5003 Zeitschritten und euler.}}
+                \label{fig:lcghist4}
+            \end{subfigure}
+        \end{figure*}
+
+
+\begin{figure*}
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung101Schritten.pdf}
+            \caption[Network2]%
+            {{\small Die Energieerhaltung bei 101 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist1}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung201Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 201 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist2}
+        \end{subfigure}
+        \vskip\baselineskip
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung4001Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 4001 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist3}
+        \end{subfigure}
+        \quad
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{build/energieerhaltung5001Schritten.pdf}
+            \caption[]%
+            {{\small Die Energieerhaltung bei 5001 Zeitschritten und rungekutta4.}}
+            \label{fig:lcghist4}
+        \end{subfigure}
+    \end{figure*}
+Man erkennt, dass bei feinerer Schrittweite die Rundungsfehler kleiner werden und die Energieerhaltung besser erfüllt ist.
 \subsection*{b)}
 
-
-
+\begin{figure}
+  \centering
+  \includegraphics{build/4001Schritten.pdf}
+  \caption{Zum Vergleich ein 3D-Plot mit $r=(1, 1, 1)$ und $v=(0, 0, 0)$.}
+  \label{}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics{build/3000Schritten.pdf}
+  \caption{Ein 3D-Plot mit $r=(1, 1, 1)$ und $v=(1, 1, 1)$.}
+  \label{fig:4001Schritten}
+\end{figure}
+Abbildung \ref{fig:4001Schritten} zeigt, dass $v(0) \neq 0$ nur dazu führt, dass die Auslenkung größer wird, da dann $r(0)$ nicht mehr die maximale Auslenkung ist, sondern nur ein Punkt auf der Bahn.
+\begin{figure}
+  \centering
+  \includegraphics{build/2999Schritten.pdf}
+  \caption{Ein 3D-Plot mit $r=(1, 1, 1)$ und $v=(1, 0, 0)$.}
+  \label{fig:2999Schritten}
+\end{figure}
+Abbildung \ref{fig:2999Schritten} zeigt, dass $r(0) \nparallel v(0)$ zu einer Kreisbahn führt.
 
 
 \end{document}
