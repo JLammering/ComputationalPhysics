@@ -64,11 +64,11 @@ MatrixXd rungekutta4(VectorXd rAnfang, VectorXd vAnfang, double T, int N, functi
 }
 
 
-void absaven(MatrixXd M){//gesamte MAtrix in datei schreiben
+void absaven(MatrixXd M, string number){//gesamte MAtrix in datei schreiben
 	int dim = M.cols();
 	cout << "dim="<<dim<<endl;
 	ofstream myfile;
-	myfile.open("build/auslenk.txt");
+	myfile.open("build/auslenk" + number + ".txt");
 	myfile << "#theta1 theta2 v_theta1 v_theta2\n";
 		for (size_t j = 0; j < dim; j++) {
 			myfile << M(0, j) <<" "<<M(1, j)<<" "<<M(2, j)<<" "<<M(3, j) << "\n";
@@ -77,14 +77,23 @@ void absaven(MatrixXd M){//gesamte MAtrix in datei schreiben
 }
 
 int main() {
+	// anfangsbedingung 1
 	VectorXd rAnfang(2);
-	rAnfang << 0, 3.14;
+	rAnfang << 0.1, 0.1 * pow(2, 0.5);
 	VectorXd vAnfang(2);
-	vAnfang << 0, 2;
+	vAnfang << 0, 0;
 
+	// anfangsbedingung 2
+	VectorXd rAnfang2(2);
+	rAnfang2 << 0.1, -0.1 * pow(2, 0.5);
+	VectorXd vAnfang2(2);
+	vAnfang2 << 0, 0;
 	//a
 	cout << rungekutta4(rAnfang, vAnfang, 3, 3, kraftfeldDP) << endl;
-	absaven(rungekutta4(rAnfang, vAnfang, 15, 20*15, kraftfeldDP));
+	absaven(rungekutta4(rAnfang, vAnfang, 15, 20*15, kraftfeldDP), "1");
+
+	cout << rungekutta4(rAnfang2, vAnfang2, 3, 3, kraftfeldDP) << endl;
+	absaven(rungekutta4(rAnfang2, vAnfang2, 15, 20*15, kraftfeldDP), "2");
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
