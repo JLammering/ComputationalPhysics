@@ -24,7 +24,7 @@ VectorXd kraftfeldDP(VectorXd y){
 	double theta2 = y(1);
 	double theta1punkt = y(2);
 	double theta2punkt = y(3);
-	double theta1punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(mu*g1*sin(theta2)*cos(theta2-theta1)+mu*pow(theta2punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g1*sin(theta1)+ (mu/lamda)*pow(theta2punkt, 2)*sin(theta2-theta1));
+	double theta1punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(mu*g1*sin(theta2)*cos(theta2-theta1)+mu*pow(theta1punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g1*sin(theta1)+ (mu/lamda)*pow(theta2punkt, 2)*sin(theta2-theta1));
 	double theta2punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(g2*sin(theta1)*cos(theta2-theta1)-mu*pow(theta2punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g2*sin(theta2)- lamda*pow(theta1punkt, 2)*sin(theta2-theta1));
 	rueckvector << theta1punktpunkt, theta2punktpunkt;
 	return rueckvector;
@@ -90,10 +90,10 @@ int main() {
 	vAnfang2 << 0, 0;
 	//a
 	cout << rungekutta4(rAnfang, vAnfang, 3, 3, kraftfeldDP) << endl;
-	absaven(rungekutta4(rAnfang, vAnfang, 15, 20*15, kraftfeldDP), "1");
+	absaven(rungekutta4(rAnfang, vAnfang, 15, 2000, kraftfeldDP), "1");
 
 	cout << rungekutta4(rAnfang2, vAnfang2, 3, 3, kraftfeldDP) << endl;
-	absaven(rungekutta4(rAnfang2, vAnfang2, 15, 20*15, kraftfeldDP), "2");
+	absaven(rungekutta4(rAnfang2, vAnfang2, 15, 2000, kraftfeldDP), "2");
 
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
 	return 0;
