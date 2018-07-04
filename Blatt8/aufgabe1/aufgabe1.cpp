@@ -24,7 +24,7 @@ VectorXd kraftfeldDP(VectorXd y){
 	double theta2 = y(1);
 	double theta1punkt = y(2);
 	double theta2punkt = y(3);
-	double theta1punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(mu*g1*sin(theta2)*cos(theta2-theta1)+mu*pow(theta1punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g1*sin(theta1)+ (mu/lamda)*pow(theta2punkt, 2)*sin(theta2-theta1));
+	double theta1punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(mu*g1*sin(theta2)*cos(theta2-theta1)+mu*pow(theta2punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g1*sin(theta1)+ (mu/lamda)*pow(theta2punkt, 2)*sin(theta2-theta1));
 	double theta2punktpunkt = 1/(1-mu*pow(cos(theta2-theta1), 2))*(g2*sin(theta1)*cos(theta2-theta1)-mu*pow(theta2punkt, 2)*sin(theta2-theta1)*cos(theta2-theta1)-g2*sin(theta2)- lamda*pow(theta1punkt, 2)*sin(theta2-theta1));
 	rueckvector << theta1punktpunkt, theta2punktpunkt;
 	return rueckvector;
