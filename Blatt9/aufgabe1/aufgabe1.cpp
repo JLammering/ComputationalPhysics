@@ -15,10 +15,6 @@
 using namespace std;
 using namespace Eigen;
 
-double dist(VectorXd a, VectorXd b){//berechnet abstand zwischen zwei Punkten
-	return(sqrt(pow(a(0) - b(0), 2) + pow(a(1) - b(1), 2)));
-}
-
 
 double LJAbleitung(double r){
 	double kraft = - 48 * (pow(1 / r, 13) - 0.5 * pow(1 / r, 7)); // potential ableitung
@@ -61,24 +57,16 @@ MatrixXd forces(MatrixXd teilchen, int L){
 	return F;
 }
 
-// VectorXd fvector(VectorXd y, function<VectorXd(VectorXd)> kraftfeld){//allgemeiner fvector
-// 	VectorXd f_rueck(y.rows());
-// 	f_rueck << y.tail(2), kraftfeld(y);//oben die unteren zwei Spalten vom mitgegebenen Vektor. unten die oberen zwei
-// 	return f_rueck;
-// }
-//
-// VectorXd integrate(MatrixXd teilchen, int aktuell, double h, int L, function<VectorXd(VectorXd)> kraftfeld){
-// 	double r_C = L/2.0;
-// 	VectorXd r = teilchen.col(aktuell).head(2);
-// 	VectorXd v = teilchen.col(aktuell).segment(3, 2);
-// 	VectorXd a = teilchen.col(aktuell).tail(2);
-// 	VectorXd r_neu = r + h*v + 0.5*a*pow(h, 2);
-// 	VectorXd a_neu = kraftfeld(teilchen, aktuell, r_C);
-// 	VectorXd v_neu = v + 0.5(a_neu + a)*h;
-// 	VectorXd neues << r_neu, v_neu, a_neu;
-// 	return Y_Matrix;
-// }
-//
+
+MatrixXd integrate(MatrixXd teilchen, double h, int L){
+	int N = teilchen.cols();
+	teilchen.block(0, 0, 2, N)  = teilchen.block(0, 0, 2, N)  + h*teilchen.block(2, 0, 2, N) + 0.5*teilchen.block(4, 0, 2, N)*pow(h, 2);// neue Positionen
+	auto a_nplus1 =	forces(teilchen, L);
+	teilchen.block(2, 0, 2, N) = teilchen.block(2, 0, 2, N) + 0.5*(teilchen.block(4, 0, 2, N)+a_nplus1);// neue Geschwindigkeiten
+	teilchen.block(4, 0, 2, N) = a_nplus1; // neue Beschleunigungen
+	return teilchen;
+}
+
 MatrixXd init(int N, int L, double T){
 	MatrixXd teilchen(6, N);
 	//r
@@ -93,17 +81,34 @@ MatrixXd init(int N, int L, double T){
 	//v
 	mt19937 rng; //erzeugt mersenne twister 19937 generator
 	rng.seed(random_device()()); //setzt seed (”startwert”) zufällig std ::
-	normal_distribution<double> distribution(0.0, 1.0);
-	double scale = sqrt(T * (2 * (N - 1))); // sqrt(kb * T / m ) mit m = 1 , kb = 1
+	normal_distribution<double> distribution(0.0, sqrt(T));
+	// double scale = sqrt(T * (2 * (N - 1))); // sqrt(kb * T / m ) mit m = 1 , kb = 1
 	for (size_t i = 0; i < N; i++) {
-		teilchen.col(i).segment(2, 2) << scale * distribution(rng), scale * distribution(rng);
+		teilchen.col(i).segment(2, 2) <<  distribution(rng), distribution(rng);
+		teilchen.col(i).tail(2) << 0,0;
 	}
 	cout <<"Schwerpunktsgeschwind vorher = "<< teilchen.block(2, 0, 2, N).rowwise().sum()<<endl;
 	teilchen.block(2, 0, 2, N).colwise() -= teilchen.block(2, 0, 2, N).rowwise().sum() / (double)N;
 	cout <<"Schwerpunktsgeschwind nachher = "<< teilchen.block(2, 0, 2, N).rowwise().sum()<<endl;
+
+	//a
+	teilchen.block(4, 0, 2, N) = forces(teilchen, L);
 return teilchen;
 }
 
+void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h)
+	auto teilchen = init(N, L, T);
+	t=0;
+
+	do while (t< tequi) {
+		integrate(teilchen, h, L);
+		t=t+h;
+		}
+		do while (t<tmax){
+		  integrate(teilchen, h, L){
+
+			integrate;
+		}
 
 int main() {
 	const int N = 16; // immer quadratzahl
