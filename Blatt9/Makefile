@@ -1,5 +1,5 @@
 CC=g++
-OPT= -std=c++11 -o3
+OPT= -std=c++11 -o3 -I/usr/include/eigen3
 
 all: build/main.pdf
 

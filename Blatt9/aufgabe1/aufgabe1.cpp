@@ -67,6 +67,7 @@ MatrixXd integrate(MatrixXd teilchen, double h, int L){
 	return teilchen;
 }
 
+
 MatrixXd init(int N, int L, double T){
 	MatrixXd teilchen(6, N);
 	//r
@@ -96,19 +97,19 @@ MatrixXd init(int N, int L, double T){
 return teilchen;
 }
 
-void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h)
-	auto teilchen = init(N, L, T);
-	t=0;
-
-	do while (t< tequi) {
-		integrate(teilchen, h, L);
-		t=t+h;
-		}
-		do while (t<tmax){
-		  integrate(teilchen, h, L){
-
-			integrate;
-		}
+// void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h)
+// 	auto teilchen = init(N, L, T);
+// 	t=0;
+//
+// 	do while (t< tequi) {
+// 		integrate(teilchen, h, L);
+// 		t=t+h;
+// 		}
+// 		do while (t<tmax){
+// 		  integrate(teilchen, h, L){
+//
+// 			integrate;
+// 		}
 
 int main() {
 	const int N = 16; // immer quadratzahl
