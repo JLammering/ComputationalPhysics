@@ -4,29 +4,29 @@ import matplotlib.animation as animation
 import matplotlib.cm as cm
 
 
-def maxwell2d(vel, tem):
-    t = 0.5 / tem
-    return(2 * t * vel * np.exp(- t * vel**2))
-
-
-def plotting(T):
-    number = int(1e5)
-    mu = 0
-    sigma = 1
-    x_normal_verteilung = np.random.normal(mu, sigma, number)
-    y_normal_verteilung = np.random.normal(mu, sigma, number)
-    v_norm = np.sqrt(T) * np.sqrt(x_normal_verteilung**2 + y_normal_verteilung**2)
-    x = np.linspace(0, 10, 1e4)
-    plt.hist(v_norm, int(number**(0.333)), normed=True)
-    # plt.plot(x, np.sin(x))
-    # plt.plot(x, (1/(2*np.pi*T))**(3/2)*np.exp(-x**2/(2*T)))
-    plt.plot(x, maxwell2d(x, T))
-    # plt.savefig("build/plots/plot.pdf")
-    plt.show()
-
-
+# def maxwell2d(vel, tem):
+#     t = 0.5 / tem
+#     return(2 * t * vel * np.exp(- t * vel**2))
+#
+#
+#if __name__ == '__main__':
+# def plotting(T):
+#     number = int(1e5)
+#     mu = 0
+#     sigma = 1
+#     x_normal_verteilung = np.random.normal(mu, sigma, number)
+#     y_normal_verteilung = np.random.normal(mu, sigma, number)
+#     v_norm = np.sqrt(T) * np.sqrt(x_normal_verteilung**2 + y_normal_verteilung**2)
+#     x = np.linspace(0, 10, 1e4)
+#     plt.hist(v_norm, int(number**(0.333)), normed=True)
+#     # plt.plot(x, np.sin(x))
+#     # plt.plot(x, (1/(2*np.pi*T))**(3/2)*np.exp(-x**2/(2*T)))
+#     plt.plot(x, maxwell2d(x, T))
+#     # plt.savefig("build/plots/plot.pdf")
+#     plt.show()
+#     return()
 # darstellung der MD_Simulation
-
+anzahl_steps = 20
 def update_fig(steps):
         #plt.clf()
         matrix = np.genfromtxt("build/"+str(steps)+".txt", unpack='True')

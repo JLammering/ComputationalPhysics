@@ -28,9 +28,10 @@ void absaven(int schritt, MatrixXd teilchen){
 	for (size_t row = 0; row < 2; row++) {
 	for (size_t cols = 0; cols < N; cols++) {
 		myfile << teilchen(row, cols) << " ";
+		}
+		myfile << "\n";
 	}
-	myfile << "\n";
-}
+	//myfile << teilchen.block(0, 0, 2, N);
 myfile.close();
 }
 
@@ -119,7 +120,7 @@ return teilchen;
 
 void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h){
 	auto teilchen = init(N, L, T);
-	double t=0;
+	double t = 0;
 	int schritt = 0;
 
 	do {
