@@ -73,7 +73,14 @@ MatrixXd forces(MatrixXd teilchen, int L){
 
 MatrixXd integrate(MatrixXd teilchen, double h, int L){
 	int N = teilchen.cols();
-	teilchen.block(0, 0, 2, N)  = teilchen.block(0, 0, 2, N)  + h*teilchen.block(2, 0, 2, N) + 0.5*teilchen.block(4, 0, 2, N)*pow(h, 2);// neue Positionen
+	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N)  + h*teilchen.block(2, 0, 2, N) + 0.5*teilchen.block(4, 0, 2, N)*pow(h, 2);// neue Positionen
+	// cout<<" Teilcheposition vorher: \n"  <<teilchen.block(0, 0, 2, 5) << endl;
+	MatrixXd Hilfematrix = teilchen.block(0, 0, 2, N);
+	Hilfematrix =  L * (teilchen.block(0, 0, 2, N).array()/L).floor();
+	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) - Hilfematrix ;
+	// cout<<"Teilchenposition nachher \n" <<teilchen.block(0, 0, 2, 5) << endl;
+ 	// teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) + (teilchen.block(0, 0, 2, N)<0.0)*(double)L;
+
 	auto a_nplus1 =	forces(teilchen, L);
 	teilchen.block(2, 0, 2, N) = teilchen.block(2, 0, 2, N) + 0.5*(teilchen.block(4, 0, 2, N)+a_nplus1);// neue Geschwindigkeiten
 	teilchen.block(4, 0, 2, N) = a_nplus1; // neue Beschleunigungen
@@ -119,7 +126,6 @@ void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h){
 		teilchen = integrate(teilchen, h, L);
 		absaven(schritt++, teilchen);
 		t += h;
-
 	}while (t < tequi);
 
 	do {
@@ -135,13 +141,18 @@ int main() {
 	const int N = 16; // immer quadratzahl
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
-	double tequi = 10;
-	double tmax = 30;
-	double h = 0.1;
+	double tequi = 0.02;
+	double tmax = 1;
+	double h = 0.01;
+	ofstream myfile;
+	myfile.open("build/paras.txt");
+	//myfile << "#schritte\n";
+	myfile << tmax/h << endl;
+	myfile.close();
 	//MatrixXd teilchen = init(N, L, 1);
 	// cout << forces(teilchen, L)<<endl;
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	cout << init(N, L, 1)<<endl;
+	//cout << init(N, L, 1)<<endl;
 	MD_Simulation(L, N, T, tequi, tmax, h);
 
 	return 0;

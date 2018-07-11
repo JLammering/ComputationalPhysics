@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.cm as cm
 
 
 def maxwell2d(vel, tem):
@@ -25,21 +26,30 @@ def plotting(T):
 
 
 # darstellung der MD_Simulation
-anzahl_steps = 200
+
 def update_fig(steps):
-        steps *= 1
+        #plt.clf()
         matrix = np.genfromtxt("build/"+str(steps)+".txt", unpack='True')
-        frame = plt.plot(matrix[:,0], matrix[:,1], '.', marker='o',  markersize=10)
-        #x = np.arange(0, len(matrix))
-        #frame = plt.pcolormesh(x, x, matrix)
+        colors = cm.rainbow(np.linspace(0, 1, matrix.shape[0]))
+        for i in range(matrix.shape[0]):
+            frame = plt.plot(matrix[i, 0], matrix[i, 1], marker='o',  markersize=10, color= colors[i])
         plt.title('sweep nr:' +str(steps))
         # plt.colorbar(label='Spin')
         return(frame)
 
-ani1 = animation.FuncAnimation(plt.figure(), update_fig, frames=anzahl_steps)
-plt.show()
+
+def MDanime():
+    file = open("build/paras.txt", "r")
+    anzahl_steps = int(file.readline())
+    file.close()
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.set_xlim(0, 8)
+    ani1 = animation.FuncAnimation(fig, update_fig, frames=anzahl_steps)
+    plt.show()
 
 
 if __name__ == '__main__':
-    # H = np.genfromtxt('build/magnetisierung.txt', unpack='True')
-    plotting(1)
+    # plotting(1)
+    MDanime()
