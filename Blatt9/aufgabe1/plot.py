@@ -9,7 +9,6 @@ def maxwell2d(vel, tem):
     return(2 * t * vel * np.exp(- t * vel**2))
 
 
-if __name__ == '__main__':
 def plotting(T):
     number = int(1e5)
     mu = 0
@@ -27,29 +26,36 @@ def plotting(T):
     return()
 # darstellung der MD_Simulation
 
-def update_fig(steps):
-        #plt.clf()
-        fig.clear()
-        matrix = np.genfromtxt("build/"+str(steps)+".txt", unpack='True')
-        colors = cm.rainbow(np.linspace(0, 1, matrix.shape[0]))
-        for i in range(matrix.shape[0]):
-            frame = plt.plot(matrix[i, 0], matrix[i, 1], marker='o',  markersize=10, color= colors[i])
-        plt.title('sweep nr:' +str(steps))
-        # plt.colorbar(label='Spin')
-        return(frame)
+
+
 
 
 def MDanime():
-    anzahl_steps = np.genfromtxt("build/paras.txt", unpack=True)
-    fig = plt.figure()
     file = open("build/paras.txt", "r")
-    anzahl_steps = int(file.readline())
+    para = []
+    for val in file.read().split():
+        para.append(int(val))
+    anzahl_steps = para[0]
+    abstand = para[1]
     file.close()
+    fig = plt.figure()
+    #step = 0
+    colors = cm.rainbow(np.linspace(0, 1, 16))
 
-    ax = fig.add_subplot(1, 1, 1)
-    ax.set_xlim(0, 8)
-    ani1 = animation.FuncAnimation(fig, update_fig, frames=anzahl_steps)
-    ani1.save('build/md_sim.mp4', fps=2)
+    def update(frame):
+        plt.clf()
+        plt.xlim(0, 8)
+        plt.ylim(0, 8)
+        #fig.clear()
+        matrix = np.genfromtxt("build/"+str(frame)+".txt", unpack='True')
+        #print(xdata)
+        plt.plot(frame, np.sin(frame))
+        for i in range(matrix.shape[0]):
+           plt.plot(matrix[i, 0], matrix[i, 1], marker='o',  markersize=10, color= colors[i])
+        plt.title('Zeitschritt nr:' +str(frame))
+
+    ani1 = animation.FuncAnimation(fig, update, frames=range(abstand, anzahl_steps, abstand), interval=500)
+    #ani1.save('build/md_sim.mp4', fps=2)
     plt.show()
 
 if __name__ == '__main__':

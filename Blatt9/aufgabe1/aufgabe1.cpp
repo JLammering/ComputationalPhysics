@@ -16,6 +16,28 @@ using namespace std;
 using namespace Eigen;
 
 
+
+void measure(ofstream &myfile, MatrixXd teilchen, double zeit){
+	int N = teilchen.cols();
+	myfile << zeit << " ";
+
+	// schwerpunktsgeschindigkeit
+
+	MatrixXd geschwindigkeiten(1, N);
+	geschwindigkeiten = teilchen.block(2, 0, 1, N).array().square() + teilchen.block(3, 0, 1, N).array().square();
+	myfile << sqrt(geschwindigkeiten.sum())/(double)N << " ";
+
+	// kinetische energie
+	// myfile << 0.5 * teilchen.block(2, 0, 1, N).colwise().square() + teilchen.block(3, 0, 1, N).colwise().square() << " ";
+
+	// potentielle energie
+	// myfile << 0.5 *
+
+	// temperatur
+
+	myfile << endl;
+}
+
 double LJAbleitung(double r){
 	double kraft = - 48 * (pow(1 / r, 13) - 0.5 * pow(1 / r, 7)); // potential ableitung
 	return kraft;
@@ -99,49 +121,45 @@ MatrixXd init(int N, int L, double T){
 		teilchen.col(i).head(2) *= L / 8.0;
 		i++;
 	}
-
 	//v
 	mt19937 rng; //erzeugt mersenne twister 19937 generator
 	rng.seed(random_device()()); //setzt seed (”startwert”) zufällig std ::
 	normal_distribution<double> distribution(0.0, sqrt(T));
-	// double scale = sqrt(T * (2 * (N - 1))); // sqrt(kb * T / m ) mit m = 1 , kb = 1
 	for (size_t i = 0; i < N; i++) {
 		teilchen.col(i).segment(2, 2) <<  distribution(rng), distribution(rng);
 		teilchen.col(i).tail(2) << 0,0;
 	}
-	//cout <<"Schwerpunktsgeschwind vorher = "<< teilchen.block(2, 0, 2, N).rowwise().sum()<<endl;
 	teilchen.block(2, 0, 2, N).colwise() -= teilchen.block(2, 0, 2, N).rowwise().sum() / (double)N;
-	//cout <<"Schwerpunktsgeschwind nachher = "<< teilchen.block(2, 0, 2, N).rowwise().sum()<<endl;
 
 	//a
 	teilchen.block(4, 0, 2, N) = forces(teilchen, L);
 return teilchen;
 }
 
-void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h){
+void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h, int speicher){
 	auto teilchen = init(N, L, T);
 	double t = 0;
 	int schritt = 0;
 
+	ofstream myfile;
+	myfile.open("build/measurements.txt");
+
 	do {
 		teilchen = integrate(teilchen, h, L);
-		absaven(schritt++, teilchen);
+		schritt ++;
+		if (schritt %speicher ==0) {
+			cout << schritt << "abgespeichert" << endl;
+			absaven(schritt, teilchen);
+		}
+		//measure(myfile, teilchen, t);
 		t += h;
 	}while (t < tequi);
+	myfile.close();
 
 	do {
 		  teilchen = integrate(teilchen, h, L);
-			absaven(schritt++, teilchen);
+			//absaven(schritt++, teilchen);
 			t += h;
-			// messe kinetic energy
-			ofstream enfile;
-			enfile.open("build/energy" + str(schritt) + "T.txt");
-			for (size_t row = 0; row < 2; row++) {
-			for (size_t cols = 0; cols < N; cols++) {
-				myfile << teilchen(row, cols) << " ";
-				}
-				myfile << "\n";
-			}
 		}while (t < tmax);
 }
 
@@ -151,19 +169,18 @@ int main() {
 	const int N = 16; // immer quadratzahl
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
-	double tequi = 0.02;
-	double tmax = 0.5;
-	double h = 0.01;
+	double tequi = 1e-1;
+	double tmax = tequi;
+	double h = 1e-6;
+	int speicher = 1000;
 	ofstream myfile;
 	myfile.open("build/paras.txt");
 	//myfile << "#schritte\n";
-	myfile << tmax/h << endl;
+	myfile << tmax/h << " "<<speicher<< endl;
 	myfile.close();
 	//MatrixXd teilchen = init(N, L, 1);
-	// cout << forces(teilchen, L)<<endl;
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	//cout << init(N, L, 1)<<endl;
-	MD_Simulation(L, N, T, tequi, tmax, h);
+	MD_Simulation(L, N, T, tequi, tmax, h, speicher);
 
 	return 0;
 }
