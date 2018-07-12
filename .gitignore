@@ -13,5 +13,6 @@ Debug/
 *.log
 *.fdb_latexmk
 *.fls
+*.mp4
 build/
 *.o

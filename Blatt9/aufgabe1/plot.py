@@ -26,9 +26,13 @@ import matplotlib.cm as cm
 #     plt.show()
 #     return()
 # darstellung der MD_Simulation
-anzahl_steps = 20
+anzahl_steps = 100
+
+fig = plt.figure()
+
 def update_fig(steps):
         #plt.clf()
+        fig.clear()
         matrix = np.genfromtxt("build/"+str(steps)+".txt", unpack='True')
         colors = cm.rainbow(np.linspace(0, 1, matrix.shape[0]))
         for i in range(matrix.shape[0]):
@@ -43,12 +47,11 @@ def MDanime():
     anzahl_steps = int(file.readline())
     file.close()
 
-    fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1)
     ax.set_xlim(0, 8)
     ani1 = animation.FuncAnimation(fig, update_fig, frames=anzahl_steps)
+    ani1.save('md_sim.mp4', fps=2)
     plt.show()
-
 
 if __name__ == '__main__':
     # plotting(1)
