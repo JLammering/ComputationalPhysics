@@ -133,6 +133,15 @@ void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h){
 		  teilchen = integrate(teilchen, h, L);
 			absaven(schritt++, teilchen);
 			t += h;
+			// messe kinetic energy
+			ofstream enfile;
+			enfile.open("build/energy" + str(schritt) + "T.txt");
+			for (size_t row = 0; row < 2; row++) {
+			for (size_t cols = 0; cols < N; cols++) {
+				myfile << teilchen(row, cols) << " ";
+				}
+				myfile << "\n";
+			}
 		}while (t < tmax);
 }
 
@@ -143,7 +152,7 @@ int main() {
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
 	double tequi = 0.02;
-	double tmax = 1;
+	double tmax = 0.5;
 	double h = 0.01;
 	ofstream myfile;
 	myfile.open("build/paras.txt");
