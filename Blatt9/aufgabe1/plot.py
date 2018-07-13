@@ -27,7 +27,13 @@ def plotting(T):
 # darstellung der MD_Simulation
 
 
+def plotmessungen():
+    time, geschwindigkeit = np.genfromtxt("build/measurements.txt", unpack='True')
 
+    plt.plot(time, geschwindigkeit, label='geschwindigkeit')
+    plt.xlabel('time/s')
+    plt.legend(loc='best')
+    plt.savefig('build/messung.pdf')
 
 
 def MDanime():
@@ -61,3 +67,4 @@ def MDanime():
 if __name__ == '__main__':
     # plotting(1)
     MDanime()
+    plotmessungen()

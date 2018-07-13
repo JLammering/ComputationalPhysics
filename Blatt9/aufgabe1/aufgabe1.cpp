@@ -23,9 +23,9 @@ void measure(ofstream &myfile, MatrixXd teilchen, double zeit){
 
 	// schwerpunktsgeschindigkeit
 
-	MatrixXd geschwindigkeiten(1, N);
-	geschwindigkeiten = teilchen.block(2, 0, 1, N).array().square() + teilchen.block(3, 0, 1, N).array().square();
-	myfile << sqrt(geschwindigkeiten.sum())/(double)N << " ";
+	MatrixXd schwerpunktsgeschwindigkeit(2, 1);
+	schwerpunktsgeschwindigkeit = teilchen.block(2, 0, 2, N).rowwise().sum();
+	myfile << schwerpunktsgeschwindigkeit.norm()/(double)N << " ";
 
 	// kinetische energie
 	// myfile << 0.5 * teilchen.block(2, 0, 1, N).colwise().square() + teilchen.block(3, 0, 1, N).colwise().square() << " ";
@@ -53,6 +53,7 @@ void absaven(int schritt, MatrixXd teilchen){
 		}
 		myfile << "\n";
 	}
+	cout << teilchen.block(0, 0, 2, N) << endl;
 	//myfile << teilchen.block(0, 0, 2, N);
 myfile.close();
 }
@@ -99,7 +100,7 @@ MatrixXd integrate(MatrixXd teilchen, double h, int L){
 	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N)  + h*teilchen.block(2, 0, 2, N) + 0.5*teilchen.block(4, 0, 2, N)*pow(h, 2);// neue Positionen
 	// cout<<" Teilcheposition vorher: \n"  <<teilchen.block(0, 0, 2, 5) << endl;
 	MatrixXd Hilfematrix = teilchen.block(0, 0, 2, N);
-	Hilfematrix =  L * (teilchen.block(0, 0, 2, N).array()/L).floor();
+	Hilfematrix =  L * (teilchen.block(0, 0, 2, N).array()/L).floor();//periodische Randbedingungen
 	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) - Hilfematrix ;
 	// cout<<"Teilchenposition nachher \n" <<teilchen.block(0, 0, 2, 5) << endl;
  	// teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) + (teilchen.block(0, 0, 2, N)<0.0)*(double)L;
@@ -150,8 +151,8 @@ void MD_Simulation(int L, int N, double T, double tequi, double tmax, double h, 
 		if (schritt %speicher ==0) {
 			cout << schritt << "abgespeichert" << endl;
 			absaven(schritt, teilchen);
+			measure(myfile, teilchen, t);
 		}
-		//measure(myfile, teilchen, t);
 		t += h;
 	}while (t < tequi);
 	myfile.close();
@@ -169,14 +170,14 @@ int main() {
 	const int N = 16; // immer quadratzahl
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
-	double tequi = 1e-1;
+	double tequi = 1e-6;
 	double tmax = tequi;
-	double h = 1e-6;
-	int speicher = 1000;
+	double h = 1e-12;
+	int speicher = 10000;
 	ofstream myfile;
 	myfile.open("build/paras.txt");
 	//myfile << "#schritte\n";
-	myfile << tmax/h << " "<<speicher<< endl;
+	myfile << int(tmax/h) << " "<<speicher<< endl;
 	myfile.close();
 	//MatrixXd teilchen = init(N, L, 1);
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
