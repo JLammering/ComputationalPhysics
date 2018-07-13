@@ -61,7 +61,7 @@ def MDanime():
         plt.title('Zeitschritt nr:' +str(frame))
 
     ani1 = animation.FuncAnimation(fig, update, frames=range(abstand, anzahl_steps, abstand), interval=500)
-    #ani1.save('build/md_sim.mp4', fps=2)
+    ani1.save('build/md_sim.mp4', fps=2)
     plt.show()
 
 if __name__ == '__main__':
