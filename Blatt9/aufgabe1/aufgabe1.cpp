@@ -69,24 +69,17 @@ MatrixXd forces(MatrixXd teilchen, int L){
   nMatrix *= L;
 	MatrixXd F(2, N);
 	F = MatrixXd::Zero(2,N);
-	//cout << nMatrix << endl;
  // Kraftberechung
 	 for(int i = 0; i < N; i++)
    for(int j = i + 1; j < N; j++){
-		//cout << "r_i = \n"<<teilchen.col(i).head(2) << endl;
-		//cout << "r_j = \n"<<teilchen.col(j).head(2) << endl;
+
 		VectorXd r_ij = teilchen.col(j).head(2) - teilchen.col(i).head(2);
-		//cout << "r_ij = \n"<< r_ij << endl;
 
   	MatrixXd newNMatrix = nMatrix.colwise() + r_ij;
-		//cout << "Matrix: \n" << newNMatrix <<endl;
  		MatrixXd::Index minRow, minCol;
 	 	double r_ij_abs = newNMatrix.colwise().norm().minCoeff(&minRow, &minCol);
 	 	r_ij = newNMatrix.col(minCol);
-		//cout << "r_ij minimal = \n"<< r_ij << endl;
-		//cout << "r_ij_abs minimal = \n"<< r_ij_abs << endl;
 		if(r_ij_abs < r_c){
-			//cout << "liegt im Bereich\n" <<endl;
 			F.col(i) += r_ij * LJAbleitung(r_ij_abs) / r_ij_abs; //
 			F.col(j) -= r_ij * LJAbleitung(r_ij_abs) / r_ij_abs; // Newton drei
 		}
@@ -98,12 +91,9 @@ MatrixXd forces(MatrixXd teilchen, int L){
 MatrixXd integrate(MatrixXd teilchen, double h, int L){
 	int N = teilchen.cols();
 	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N)  + h*teilchen.block(2, 0, 2, N) + 0.5*teilchen.block(4, 0, 2, N)*pow(h, 2);// neue Positionen
-	// cout<<" Teilcheposition vorher: \n"  <<teilchen.block(0, 0, 2, 5) << endl;
 	MatrixXd Hilfematrix = teilchen.block(0, 0, 2, N);
 	Hilfematrix =  L * (teilchen.block(0, 0, 2, N).array()/L).floor();//periodische Randbedingungen
 	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) - Hilfematrix ;
-	// cout<<"Teilchenposition nachher \n" <<teilchen.block(0, 0, 2, 5) << endl;
- 	// teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) + (teilchen.block(0, 0, 2, N)<0.0)*(double)L;
 
 	auto a_nplus1 =	forces(teilchen, L);
 	teilchen.block(2, 0, 2, N) = teilchen.block(2, 0, 2, N) + 0.5*(teilchen.block(4, 0, 2, N)+a_nplus1);// neue Geschwindigkeiten
@@ -170,10 +160,10 @@ int main() {
 	const int N = 16; // immer quadratzahl
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
-	double tequi = 1e-6;
+	double tequi = 0.3;
 	double tmax = tequi;
-	double h = 1e-12;
-	int speicher = 10000;
+	double h = 0.001;
+	int speicher = 1;
 	ofstream myfile;
 	myfile.open("build/paras.txt");
 	//myfile << "#schritte\n";
