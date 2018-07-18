@@ -96,7 +96,7 @@ MatrixXd integrate(MatrixXd teilchen, double h, int L){
 	teilchen.block(0, 0, 2, N) = teilchen.block(0, 0, 2, N) - Hilfematrix ;
 
 	auto a_nplus1 =	forces(teilchen, L);
-	teilchen.block(2, 0, 2, N) = teilchen.block(2, 0, 2, N) + 0.5*(teilchen.block(4, 0, 2, N)+a_nplus1);// neue Geschwindigkeiten
+	teilchen.block(2, 0, 2, N) = teilchen.block(2, 0, 2, N) + 0.5*h*(teilchen.block(4, 0, 2, N)+a_nplus1);// neue Geschwindigkeiten
 	teilchen.block(4, 0, 2, N) = a_nplus1; // neue Beschleunigungen
 	return teilchen;
 }
@@ -160,9 +160,9 @@ int main() {
 	const int N = 16; // immer quadratzahl
 	int L = 8; // immer gerade waehlen!
 	int T = 1;
-	double tequi = 0.3;
+	double tequi = 10;
 	double tmax = tequi;
-	double h = 0.001;
+	double h = 0.01;
 	int speicher = 1;
 	ofstream myfile;
 	myfile.open("build/paras.txt");
